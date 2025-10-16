@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
-import os, datetime
+from flask import Flask, render_template, request, redirect
+import csv, os, datetime
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates', static_folder='static')
 BASE_UPLOAD_FOLDER = "uploads"
 os.makedirs(BASE_UPLOAD_FOLDER, exist_ok=True)
 
@@ -54,4 +54,5 @@ def invia():
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
 
 if __name__ == '__main__':
+
     app.run(debug=True)
