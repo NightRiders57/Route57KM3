@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Iscritti Night Riders</title>
+    <!-- Lightbox CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,6 +29,7 @@
             max-width: 100px;
             height: auto;
             border-radius: 5px;
+            cursor: pointer;
         }
         h1 {
             color: #ff6600;
@@ -58,15 +61,21 @@
                 <td>{{ iscrizione.cellulare }}</td>
                 <td>{{ iscrizione.auto }}</td>
                 <td>
-                    <img src="/foto/{{ iscrizione.foto1_id }}" alt="Foto 1">
+                    <a href="/foto/{{ iscrizione.foto1_id }}" data-lightbox="album-{{ iscrizione._id }}">
+                        <img src="/foto/{{ iscrizione.foto1_id }}" alt="Foto 1">
+                    </a>
                 </td>
                 <td>
-                    <img src="/foto/{{ iscrizione.foto2_id }}" alt="Foto 2">
+                    <a href="/foto/{{ iscrizione.foto2_id }}" data-lightbox="album-{{ iscrizione._id }}">
+                        <img src="/foto/{{ iscrizione.foto2_id }}" alt="Foto 2">
+                    </a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Lightbox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 </body>
 </html>
-
