@@ -1,42 +1,26 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, send_file
 from pymongo import MongoClient
-import os, datetime
-from werkzeug.utils import secure_filename
-from functools import wraps
+from bson.objectid import ObjectId
+import gridfs
+from io import BytesIO
+import datetime
 
-# ---------------- CONFIG ----------------
 app = Flask(__name__, template_folder='templates', static_folder='static')
-app.secret_key = "CHANGE_THIS_TO_A_RANDOM_SECRET_KEY"
 
-BASE_UPLOAD_FOLDER = "uploads"
-os.makedirs(BASE_UPLOAD_FOLDER, exist_ok=True)
-
-# MongoDB Atlas
+# --- MongoDB Atlas ---
 MONGO_URI = "mongodb+srv://francescofittaiolo_db_user:Chloe16@cluster0.nrsedvh.mongodb.net/nightriders?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(MONGO_URI)
 db = client.nightriders
+fs = gridfs.GridFS(db)
 iscrizioni_col = db.iscrizioni
 
-# Password per accedere a /iscritti
-ADMIN_PASSWORD = "night123"
-
-# ---------------- DECORATOR PER LOGIN ----------------
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if "logged_in" not in session:
-            return redirect(url_for("login"))
-        return f(*args, **kwargs)
-    return decorated_function
-
-# ---------------- ROUTE ----------------
+# --- Routes ---
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/invia', methods=['POST'])
 def invia():
-    # --- DATI FORM ---
     nome = request.form['nome']
     cognome = request.form['cognome']
     cellulare = request.form['cellulare']
@@ -48,20 +32,14 @@ def invia():
     brioches = request.form['brioches']
     intolleranze = request.form.get('intolleranze', '')
 
-    # --- CREA CARTELLA PER FOTO ---
-    timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    folder_name = os.path.join(BASE_UPLOAD_FOLDER, f"{timestamp}_{secure_filename(nome+''+cognome)}")
-    os.makedirs(folder_name, exist_ok=True)
+    # --- Salva le foto in GridFS ---
+    foto1_file = request.files['foto1']
+    foto2_file = request.files['foto2']
+    foto1_id = fs.put(foto1_file, filename=f"foto1_{nome}_{cognome}")
+    foto2_id = fs.put(foto2_file, filename=f"foto2_{nome}_{cognome}")
 
-    foto1 = request.files['foto1']
-    foto2 = request.files['foto2']
-    foto1_filename = os.path.join(folder_name, secure_filename(foto1.filename))
-    foto2_filename = os.path.join(folder_name, secure_filename(foto2.filename))
-    foto1.save(foto1_filename)
-    foto2.save(foto2_filename)
-
-    # --- SALVA NEL DATABASE ---
-    dati_iscrizione = {
+    # --- Salva i dati nel database ---
+    iscrizioni_col.insert_one({
         "nome": nome,
         "cognome": cognome,
         "cellulare": cellulare,
@@ -72,47 +50,34 @@ def invia():
         "passeggeri": passeggeri,
         "brioches": brioches,
         "intolleranze": intolleranze,
-        "foto1": foto1_filename,
-        "foto2": foto2_filename,
+        "foto1_id": foto1_id,
+        "foto2_id": foto2_id,
         "timestamp": datetime.datetime.now()
-    }
-    iscrizioni_col.insert_one(dati_iscrizione)
+    })
 
-    # --- CONFERMA ALL'UTENTE ---
     messaggio = f"Ciao {nome}, la tua iscrizione all’evento NIGHT RIDERS ROUTE KM3 è stata ricevuta! Ti aspettiamo 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
 
-# ---------------- LOGIN ADMIN ----------------
+# --- Mostra iscritti (con password semplice) ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         password = request.form['password']
-        if password == ADMIN_PASSWORD:
-            session['logged_in'] = True
-            return redirect(url_for('iscritti'))
+        if password == "Nightriders2025":  # Cambia con la password che vuoi
+            iscritti = list(iscrizioni_col.find())
+            return render_template('iscritti.html', iscritti=iscritti)
         else:
-            return render_template('login.html', errore="Password sbagliata")
+            return "Password errata", 401
     return render_template('login.html')
 
-# ---------------- PAGINA ISCRITTI ----------------
-@app.route('/iscritti')
-@login_required
-def iscritti():
-    tutti = list(iscrizioni_col.find().sort("timestamp", -1))
-    return render_template('iscritti.html', iscrizioni=tutti)
+# --- Serve le foto da GridFS ---
+@app.route('/foto/<file_id>')
+def mostra_foto(file_id):
+    file = fs.get(ObjectId(file_id))
+    return send_file(BytesIO(file.read()), mimetype='image/jpeg')
 
-# ---------------- LOGOUT ----------------
-@app.route('/logout')
-@login_required
-def logout():
-    session.pop('logged_in', None)
-    return redirect(url_for('login'))
-
-# ---------------- MAIN ----------------
+# --- Main ---
 if __name__ == '__main__':
+    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-
-
-
