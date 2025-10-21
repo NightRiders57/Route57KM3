@@ -1,6 +1,61 @@
-<form method="POST">
-  <label>Password:</label>
-  <input type="password" name="password" required>
-  <button type="submit">Accedi</button>
-  {% if errore %}<p style="color:red">{{ errore }}</p>{% endif %}
-</form>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Iscritti Night Riders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;   /* Nero di base */
+            color: #fff;              /* Testo bianco */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background-color: #111;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ff6600;
+            text-align: center;
+        }
+        input[type="password"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ff6600;
+            border-radius: 5px;
+            background-color: #000;
+            color: #fff;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #ff6600;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #e65c00;
+        }
+        h1 {
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Accesso Iscritti</h1>
+        <form method="POST">
+            <input type="password" name="password" placeholder="Inserisci la password" required>
+            <br>
+            <input type="submit" value="Accedi">
+        </form>
+    </div>
+</body>
+</html>
+
+
