@@ -1,54 +1,72 @@
-<h1>Lista iscritti</h1>
-<a href="{{ url_for('logout') }}">Logout</a>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Iscritti Night Riders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;   /* Nero di base */
+            color: #fff;              /* Testo bianco */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #ff6600; /* Arancione header */
+            color: #fff;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #ff6600;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Elenco Iscritti</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Email</th>
+                <th>Cellulare</th>
+                <th>Auto</th>
+                <th>Foto 1</th>
+                <th>Foto 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for iscrizione in iscritti %}
+            <tr>
+                <td>{{ iscrizione.nome }}</td>
+                <td>{{ iscrizione.cognome }}</td>
+                <td>{{ iscrizione.email }}</td>
+                <td>{{ iscrizione.cellulare }}</td>
+                <td>{{ iscrizione.auto }}</td>
+                <td>
+                    <img src="/foto/{{ iscrizione.foto1_id }}" alt="Foto 1">
+                </td>
+                <td>
+                    <img src="/foto/{{ iscrizione.foto2_id }}" alt="Foto 2">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
 
-<style>
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  th, td {
-    border: 1px solid #333;
-    padding: 8px;
-    text-align: center;
-  }
-  img.thumbnail {
-    width: 100px;
-    height: auto;
-    border-radius: 5px;
-  }
-</style>
-
-<table>
-<tr>
-  <th>Nome</th>
-  <th>Cognome</th>
-  <th>Email</th>
-  <th>Cellulare</th>
-  <th>Auto</th>
-  <th>Club</th>
-  <th>Foto1</th>
-  <th>Foto2</th>
-  <th>Data</th>
-</tr>
-{% for i in iscrizioni %}
-<tr>
-  <td>{{ i.nome }}</td>
-  <td>{{ i.cognome }}</td>
-  <td>{{ i.email }}</td>
-  <td>{{ i.cellulare }}</td>
-  <td>{{ i.auto }}</td>
-  <td>{{ i.club }}</td>
-  <td>
-    {% if i.foto1 %}
-      <img src="/{{ i.foto1 }}" alt="Foto1" class="thumbnail">
-    {% endif %}
-  </td>
-  <td>
-    {% if i.foto2 %}
-      <img src="/{{ i.foto2 }}" alt="Foto2" class="thumbnail">
-    {% endif %}
-  </td>
-  <td>{{ i.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}</td>
-</tr>
-{% endfor %}
-</table>
