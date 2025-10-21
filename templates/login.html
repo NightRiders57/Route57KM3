@@ -1,0 +1,6 @@
+<form method="POST">
+  <label>Password:</label>
+  <input type="password" name="password" required>
+  <button type="submit">Accedi</button>
+  {% if errore %}<p style="color:red">{{ errore }}</p>{% endif %}
+</form>

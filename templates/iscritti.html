@@ -1,0 +1,54 @@
+<h1>Lista iscritti</h1>
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid #333;
+    padding: 8px;
+    text-align: center;
+  }
+  img.thumbnail {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+  }
+</style>
+
+<table>
+<tr>
+  <th>Nome</th>
+  <th>Cognome</th>
+  <th>Email</th>
+  <th>Cellulare</th>
+  <th>Auto</th>
+  <th>Club</th>
+  <th>Foto1</th>
+  <th>Foto2</th>
+  <th>Data</th>
+</tr>
+{% for i in iscrizioni %}
+<tr>
+  <td>{{ i.nome }}</td>
+  <td>{{ i.cognome }}</td>
+  <td>{{ i.email }}</td>
+  <td>{{ i.cellulare }}</td>
+  <td>{{ i.auto }}</td>
+  <td>{{ i.club }}</td>
+  <td>
+    {% if i.foto1 %}
+      <img src="/{{ i.foto1 }}" alt="Foto1" class="thumbnail">
+    {% endif %}
+  </td>
+  <td>
+    {% if i.foto2 %}
+      <img src="/{{ i.foto2 }}" alt="Foto2" class="thumbnail">
+    {% endif %}
+  </td>
+  <td>{{ i.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+</tr>
+{% endfor %}
+</table>
