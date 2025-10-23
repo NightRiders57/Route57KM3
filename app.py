@@ -61,6 +61,7 @@ def invia():
         "intolleranze": intolleranze,
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
+        "qr_id": qr_id,
         "timestamp": datetime.datetime.now()
     })
 
@@ -96,4 +97,5 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
