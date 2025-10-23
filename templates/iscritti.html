@@ -50,6 +50,7 @@
                 <th>Auto</th>
                 <th>Foto 1</th>
                 <th>Foto 2</th>
+                <th>QR Code</th>
             </tr>
         </thead>
         <tbody>
@@ -69,6 +70,15 @@
                     <a href="/foto/{{ iscrizione.foto2_id }}" data-lightbox="album-{{ iscrizione._id }}">
                         <img src="/foto/{{ iscrizione.foto2_id }}" alt="Foto 2">
                     </a>
+                </td>
+                <td>
+                    {% if iscrizione.qr_id %}
+                        <a href="/qr/{{ iscrizione.qr_id }}" data-lightbox="qr-{{ iscrizione._id }}">
+                            <img src="/qr/{{ iscrizione.qr_id }}" alt="QR Code">
+                        </a>
+                    {% else %}
+                        <span style="color: #888;">N/D</span>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
