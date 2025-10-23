@@ -40,7 +40,9 @@ def invia():
     foto2_id = fs.put(foto2_file, filename=f"foto2_{nome}_{cognome}")
 
     # --- Genera codice QR con nome, cognome e targa ---
-    qr_data = f"ISCRIZIONE NIGHT RIDERS\nNome: {nome}\nCognome: {cognome}\nTarga: {auto}"
+    # Usa l'ID dell'iscrizione per creare il QR come URL
+    iscrizione_id = str(ObjectId())  # crea ID per la nuova iscrizione
+    qr_data = f"https://route57km3.onrender.com/biglietto/{iscrizione_id}"
     print(qr_data)
     qr_img = qrcode.make(qr_data)
     qr_bytes = BytesIO()
@@ -50,6 +52,7 @@ def invia():
     
     # --- Salva i dati nel database ---
     iscrizioni_col.insert_one({
+        "_id": ObjectId(Iscrizione_id),
         "nome": nome,
         "cognome": cognome,
         "cellulare": cellulare,
@@ -93,11 +96,19 @@ def mostra_qr(file_id):
     file = fs.get(ObjectId(file_id))
     return send_file(BytesIO(file.read()), mimetype='image/png')
 
+@app.route('/biglietto/<id_iscrizione>')
+def biglietto(id_iscrizione):
+    iscrizione = iscrizioni_col.find_one({"_id": ObjectId(id_iscrizione)})
+    if not iscrizione:
+        return "Biglietto non trovato", 404
+    return render_template('biglietto.html', iscrizione=iscrizione)
+
 # --- Main ---
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
