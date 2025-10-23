@@ -101,15 +101,19 @@ def mostra_qr(file_id):
 def biglietto(id_iscrizione):
     try:
         obj_id = ObjectId(id_iscrizione)
-    except:
+    except Exception:
         return "ID non valido", 400
     
-    # Aggiorna il check-in e ritorna il documento aggiornato
-    result = iscrizioni_col.find_one_and_update(
-        {"_id": obj_id},
-        {"$set": {"checkin": True}},
-        return_document=ReturnDocument.AFTER
-    )
+    try:
+        result = iscrizioni_col.find_one_and_update(
+            {"_id": obj_id},
+            {"$set": {"checkin": True}},
+            return_document=True  # restituisce il documento aggiornato
+        )
+    except Exception as e:
+        # log dell’errore su console di Render
+        print("Errore aggiornamento checkin:", e)
+        return "Errore interno", 500
     
     if not result:
         return "Biglietto non trovato", 404
@@ -121,6 +125,7 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
