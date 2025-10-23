@@ -52,7 +52,7 @@ def invia():
     
     # --- Salva i dati nel database ---
     iscrizioni_col.insert_one({
-        "_id": ObjectId(Iscrizione_id),
+        "_id": ObjectId(iscrizione_id),
         "nome": nome,
         "cognome": cognome,
         "cellulare": cellulare,
@@ -108,6 +108,7 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
