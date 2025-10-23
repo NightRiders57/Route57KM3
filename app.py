@@ -15,6 +15,10 @@ db = client.nightriders
 fs = gridfs.GridFS(db)
 iscrizioni_col = db.iscrizioni
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+    
 # --- Routes ---
 @app.route('/invia', methods=['POST'])
 def invia():
@@ -125,6 +129,7 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
