@@ -49,6 +49,7 @@ def invia():
         "intolleranze": intolleranze,
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
+        "checkin": False,
         "timestamp": datetime.datetime.now()
     })
 
@@ -101,6 +102,13 @@ def biglietto(id_iscrizione):
     iscrizione = iscrizioni_col.find_one({"_id": ObjectId(id_iscrizione)})
     if not iscrizione:
         return "Biglietto non trovato", 404
+
+    # Aggiorna il check-in a True
+    iscrizioni_col.update_one(
+        {"_id": ObjectId(id_iscrizione)},
+        {"$set": {"checkin": True}}
+    )
+
     return render_template('biglietto.html', iscrizione=iscrizione)
 
 # --- Main ---
@@ -108,6 +116,7 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
