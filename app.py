@@ -40,7 +40,8 @@ def invia():
     foto2_id = fs.put(foto2_file, filename=f"foto2_{nome}_{cognome}")
 
     # --- Genera codice QR con nome, cognome e targa ---
-    qr_data = f"Nome: {nome}\nCognome: {cognome}\nTarga: {auto}"
+    qr_data = f"ISCRIZIONE NIGHT RIDERS\nNome: {nome}\nCognome: {cognome}\nTarga: {auto}"
+    print(qr_data)
     qr_img = qrcode.make(qr_data)
     qr_bytes = BytesIO()
     qr_img.save(qr_bytes, format="PNG")
@@ -97,5 +98,6 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
