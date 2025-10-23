@@ -99,23 +99,29 @@ def mostra_qr(file_id):
 
 @app.route('/biglietto/<id_iscrizione>')
 def biglietto(id_iscrizione):
-    iscrizione = iscrizioni_col.find_one({"_id": ObjectId(id_iscrizione)})
-    if not iscrizione:
-        return "Biglietto non trovato", 404
-
-    # Aggiorna il check-in a True
-    iscrizioni_col.update_one(
-        {"_id": ObjectId(id_iscrizione)},
-        {"$set": {"checkin": True}}
+    try:
+        obj_id = ObjectId(id_iscrizione)
+    except:
+        return "ID non valido", 400
+    
+    # Aggiorna il check-in e ritorna il documento aggiornato
+    result = iscrizioni_col.find_one_and_update(
+        {"_id": obj_id},
+        {"$set": {"checkin": True}},
+        return_document=True  # restituisce il documento aggiornato
     )
-
-    return render_template('biglietto.html', iscrizione=iscrizione)
+    
+    if not result:
+        return "Biglietto non trovato", 404
+    
+    return render_template('biglietto.html', iscrizione=result)
 
 # --- Main ---
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
