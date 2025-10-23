@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, send_file
-from pymongo import MongoClient
+from pymongo import MongoClient, ReturnDocument
 from bson.objectid import ObjectId
 import gridfs
 from io import BytesIO
@@ -108,19 +108,20 @@ def biglietto(id_iscrizione):
     result = iscrizioni_col.find_one_and_update(
         {"_id": obj_id},
         {"$set": {"checkin": True}},
-        return_document=True  # restituisce il documento aggiornato
+        return_document=ReturnDocument.AFTER
     )
     
     if not result:
         return "Biglietto non trovato", 404
     
     return render_template('biglietto.html', iscrizione=result)
-
+    
 # --- Main ---
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
