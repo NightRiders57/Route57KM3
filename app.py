@@ -16,10 +16,6 @@ fs = gridfs.GridFS(db)
 iscrizioni_col = db.iscrizioni
 
 # --- Routes ---
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 @app.route('/invia', methods=['POST'])
 def invia():
     nome = request.form['nome']
@@ -39,20 +35,8 @@ def invia():
     foto1_id = fs.put(foto1_file, filename=f"foto1_{nome}_{cognome}")
     foto2_id = fs.put(foto2_file, filename=f"foto2_{nome}_{cognome}")
 
-    # --- Genera codice QR con nome, cognome e targa ---
-    # Usa l'ID dell'iscrizione per creare il QR come URL
-    iscrizione_id = str(ObjectId())  # crea ID per la nuova iscrizione
-    qr_data = f"https://route57km3.onrender.com/biglietto/{iscrizione_id}"
-    print(qr_data)
-    qr_img = qrcode.make(qr_data)
-    qr_bytes = BytesIO()
-    qr_img.save(qr_bytes, format="PNG")
-    qr_bytes.seek(0)
-    qr_id = fs.put(qr_bytes, filename=f"QR_{nome}_{cognome}.png")
-    
-    # --- Salva i dati nel database ---
-    iscrizioni_col.insert_one({
-        "_id": ObjectId(iscrizione_id),
+    # --- Salva i dati nel database (senza QR per ora) ---
+    result = iscrizioni_col.insert_one({
         "nome": nome,
         "cognome": cognome,
         "cellulare": cellulare,
@@ -65,9 +49,25 @@ def invia():
         "intolleranze": intolleranze,
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
-        "qr_id": qr_id,
         "timestamp": datetime.datetime.now()
     })
+
+    # --- Prendi l'_id generato da MongoDB ---
+    iscrizione_id = str(result.inserted_id)
+
+    # --- Genera codice QR con URL che include l'_id ---
+    qr_data = f"https://route57km3.onrender.com/biglietto/{iscrizione_id}"
+    qr_img = qrcode.make(qr_data)
+    qr_bytes = BytesIO()
+    qr_img.save(qr_bytes, format="PNG")
+    qr_bytes.seek(0)
+    qr_id = fs.put(qr_bytes, filename=f"QR_{nome}_{cognome}.png")
+
+    # --- Aggiorna documento con qr_id ---
+    iscrizioni_col.update_one(
+        {"_id": result.inserted_id},
+        {"$set": {"qr_id": qr_id}}
+    )
 
     messaggio = f"Ciao {nome}, la tua iscrizione all’evento NIGHT RIDERS ROUTE KM3 è stata ricevuta! Ti aspettiamo 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
@@ -108,6 +108,7 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
