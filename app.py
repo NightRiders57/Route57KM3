@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 import gridfs
 from io import BytesIO
 import datetime
+import qrcode
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -38,6 +39,14 @@ def invia():
     foto1_id = fs.put(foto1_file, filename=f"foto1_{nome}_{cognome}")
     foto2_id = fs.put(foto2_file, filename=f"foto2_{nome}_{cognome}")
 
+    # --- Genera codice QR con nome, cognome e targa ---
+    qr_data = f"Nome: {nome}\nCognome: {cognome}\nTarga: {auto}"
+    qr_img = qrcode.make(qr_data)
+    qr_bytes = BytesIO()
+    qr_img.save(qr_bytes, format="PNG")
+    qr_bytes.seek(0)
+    qr_id = fs.put(qr_bytes, filename=f"QR_{nome}_{cognome}.png")
+    
     # --- Salva i dati nel database ---
     iscrizioni_col.insert_one({
         "nome": nome,
@@ -76,8 +85,15 @@ def mostra_foto(file_id):
     file = fs.get(ObjectId(file_id))
     return send_file(BytesIO(file.read()), mimetype='image/jpeg')
 
+# --- Serve i QR code ---
+@app.route('/qr/<file_id>')
+def mostra_qr(file_id):
+    file = fs.get(ObjectId(file_id))
+    return send_file(BytesIO(file.read()), mimetype='image/png')
+
 # --- Main ---
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
