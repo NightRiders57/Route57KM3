@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Biglietto {{ iscrizione.nome }}</title>
+    <style>
+        body { font-family: Arial; background: #000; color: #fff; text-align:center; padding:50px; }
+        h1 { color: #ff6600; }
+        .box { border: 2px solid #ff6600; padding: 20px; display:inline-block; border-radius:10px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Biglietto Night Riders</h1>
+        <p><strong>Nome:</strong> {{ iscrizione.nome }}</p>
+        <p><strong>Cognome:</strong> {{ iscrizione.cognome }}</p>
+        <p><strong>Targa:</strong> {{ iscrizione.auto }}</p>
+        <p>Presenta questo biglietto all'evento!</p>
+    </div>
+</body>
+</html>
