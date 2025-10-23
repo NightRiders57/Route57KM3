@@ -43,6 +43,7 @@
     <table>
         <thead>
             <tr>
+                <th>Check-in</th>
                 <th>Nome</th>
                 <th>Cognome</th>
                 <th>Email</th>
@@ -56,6 +57,13 @@
         <tbody>
             {% for iscrizione in iscritti %}
             <tr>
+                <td>
+                    {% if iscrizione.checkin %}
+                        ✅
+                    {% else %}
+                        ⬜
+                     {% endif %}
+                </td>
                 <td>{{ iscrizione.nome }}</td>
                 <td>{{ iscrizione.cognome }}</td>
                 <td>{{ iscrizione.email }}</td>
@@ -89,3 +97,4 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 </body>
 </html>
+
