@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000;   /* Nero di base */
-            color: #fff;              /* Testo bianco */
+            background-color: #000;
+            color: #fff;
         }
         table {
             width: 100%;
@@ -22,7 +22,7 @@
             text-align: center;
         }
         th {
-            background-color: #ff6600; /* Arancione header */
+            background-color: #ff6600;
             color: #fff;
         }
         img {
@@ -35,6 +35,28 @@
             color: #ff6600;
             text-align: center;
             margin-top: 20px;
+        }
+        button {
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background-color: #ff8533;
+        }
+        .rifiuta {
+            background-color: #cc0000;
+        }
+        .rifiuta:hover {
+            background-color: #e60000;
+        }
+        .inviato {
+            background-color: #555 !important;
+            cursor: default;
         }
     </style>
 </head>
@@ -52,6 +74,8 @@
                 <th>Foto 1</th>
                 <th>Foto 2</th>
                 <th>QR Code</th>
+                <th>Accetta</th>
+                <th>Rifiuta</th>
             </tr>
         </thead>
         <tbody>
@@ -62,7 +86,7 @@
                         ✅
                     {% else %}
                         ⬜
-                     {% endif %}
+                    {% endif %}
                 </td>
                 <td>{{ iscrizione.nome }}</td>
                 <td>{{ iscrizione.cognome }}</td>
@@ -88,6 +112,8 @@
                         <span style="color: #888;">N/D</span>
                     {% endif %}
                 </td>
+                <td><button class="accetta">✅ Accetta</button></td>
+                <td><button class="rifiuta">❌ Rifiuta</button></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -95,6 +121,51 @@
 
     <!-- Lightbox JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Funzione per inviare WhatsApp e mostrare feedback visivo
+        const sendWhatsApp = (cellulare, msg, button, esito) => {
+            const whatsappUrl = https://wa.me/${cellulare}?text=${msg};
+            window.open(whatsappUrl, "_blank");
+            button.innerText = esito;
+            button.classList.add("inviato");
+            button.disabled = true;
+        };
+
+        // ACCETTA
+        document.querySelectorAll(".accetta").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const row = btn.closest("tr");
+                const nome = row.children[1].innerText.trim();
+                const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
+                const qrLink = row.querySelector("td:nth-child(9) a");
+                const qrUrl = qrLink ? qrLink.href : "";
+
+                const msg = Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A +
+                            Ti aspettiamo all’evento *Night Riders*!%0A +
+                            Mostra questo QR all’ingresso:%0A${qrUrl}%0A%0A +
+                            A presto! 🔥;
+
+                sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
+            });
+        });
+
+        // RIFIUTA
+        document.querySelectorAll(".rifiuta").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const row = btn.closest("tr");
+                const nome = row.children[1].innerText.trim();
+                const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
+
+                const msg = Ciao ${nome}, grazie per la tua iscrizione a *Night Riders*. 🚗💨%0A +
+                            Purtroppo la tua partecipazione non è stata accettata per questa edizione.%0A%0A +
+                            Speriamo di rivederti presto a uno dei prossimi eventi! 👋;
+
+                sendWhatsApp(cellulare, msg, btn, "❌ Rifiutato");
+            });
+        });
+    });
+    </script>
 </body>
 </html>
-
