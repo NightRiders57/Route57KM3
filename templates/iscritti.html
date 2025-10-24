@@ -80,7 +80,7 @@
         </thead>
         <tbody>
             {% for iscrizione in iscritti %}
-            <tr>
+            <tr data-id="{{ iscrizione._id }}">
                 <td>
                     {% if iscrizione.checkin %}
                         ✅
