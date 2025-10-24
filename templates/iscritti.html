@@ -142,10 +142,10 @@
                 const qrLink = row.querySelector("td:nth-child(9) a");
                 const qrUrl = qrLink ? qrLink.href : "";
 
-                const msg = Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A +
-                            Ti aspettiamo all’evento *Night Riders*!%0A +
-                            Mostra questo QR all’ingresso:%0A${qrUrl}%0A%0A +
-                            A presto! 🔥;
+                const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
+                            `Ti aspettiamo all’evento *Night Riders*!%0A` +
+                            `Mostra questo QR all’ingresso:%0A${qrUrl}%0A%0A` +
+                            `A presto! 🔥`;
 
                 sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
             });
@@ -158,9 +158,9 @@
                 const nome = row.children[1].innerText.trim();
                 const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
 
-                const msg = Ciao ${nome}, grazie per la tua iscrizione a *Night Riders*. 🚗💨%0A +
-                            Purtroppo la tua partecipazione non è stata accettata per questa edizione.%0A%0A +
-                            Speriamo di rivederti presto a uno dei prossimi eventi! 👋;
+                const msg = `Ciao ${nome}, grazie per la tua iscrizione a *Night Riders*. 🚗💨%0A` +
+                            `Purtroppo la tua partecipazione non è stata accettata per questa edizione.%0A%0A` +
+                            `Speriamo di rivederti presto a uno dei prossimi eventi! 👋`;
 
                 sendWhatsApp(cellulare, msg, btn, "❌ Rifiutato");
             });
@@ -169,4 +169,5 @@
     </script>
 </body>
 </html>
+
 
