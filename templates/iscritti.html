@@ -111,10 +111,22 @@
                     {% else %}
                         <span style="color: #888;">N/D</span>
                     {% endif %}
-                </td>
-                <td><button class="accetta">✅ Accetta</button></td>
-                <td><button class="rifiuta">❌ Rifiuta</button></td>
-            </tr>
+                <td>
+    <button class="accetta"
+        {% if iscrizione.whatsapp_accettato %}
+            disabled class="inviato"
+        {% endif %}>
+        ✅ Accetta
+    </button>
+</td>
+<td>
+    <button class="rifiuta"
+        {% if iscrizione.whatsapp_rifiutato %}
+            disabled class="inviato"
+        {% endif %}>
+        ❌ Rifiuta
+    </button>
+</td>
             {% endfor %}
         </tbody>
     </table>
@@ -178,6 +190,7 @@
     </script>
 </body>
 </html>
+
 
 
 
