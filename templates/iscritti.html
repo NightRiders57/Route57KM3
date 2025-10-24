@@ -126,7 +126,7 @@
     document.addEventListener("DOMContentLoaded", () => {
         // Funzione per inviare WhatsApp e mostrare feedback visivo
         const sendWhatsApp = (cellulare, msg, button, esito) => {
-            const whatsappUrl = https://wa.me/${cellulare}?text=${msg};
+            const whatsappUrl =  `https://wa.me/${cellulare}?text=${msg}`;
             window.open(whatsappUrl, "_blank");
             button.innerText = esito;
             button.classList.add("inviato");
@@ -169,3 +169,4 @@
     </script>
 </body>
 </html>
+
