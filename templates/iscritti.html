@@ -163,7 +163,7 @@
                 sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
 
                  // 👇 Aggiorna il DB
-                fetch(`/aggiorna_whatsapp/${iscrizione_id}?esito=accettato`, { method: 'POST' });
+                fetch(`/aggiorna_whatsapp/${iscrizione_id}?tipo=accetta`, { method: 'POST' });
 
             });
         });
@@ -183,13 +183,14 @@
                 sendWhatsApp(cellulare, msg, btn, "❌ Rifiutato");
 
                 // 👇 Aggiorna il DB
-                fetch(`/aggiorna_whatsapp/${iscrizione_id}?esito=accettato`, { method: 'POST' });
+                fetch(`/aggiorna_whatsapp/${iscrizione_id}?tipo=rifiuta`, { method: 'POST' });
             });
         });
     });
     </script>
 </body>
 </html>
+
 
 
 
