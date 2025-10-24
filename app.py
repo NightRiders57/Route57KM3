@@ -127,24 +127,24 @@ def biglietto(id_iscrizione):
 
 @app.route('/aggiorna_whatsapp/<id_iscrizione>', methods=['POST'])
 def aggiorna_whatsapp(id_iscrizione):
-    esito = request.args.get("esito")
-    if esito not in ["accettato", "rifiutato"]:
-        return "Esito non valido", 400
-    try:
-        iscrizioni_col.update_one(
-            {"_id": ObjectId(id_iscrizione)},
-            {"$set": {"stato_whatsapp": esito}}
-        )
+    tipo = request.args.get('tipo')
+    if tipo not in ["accetta", "rifiuta"]:
+        return "Tipo non valido", 400
+        try:
+        obj_id = ObjectId(id_iscrizione)
+        field = "whatsapp_accettato" if tipo == "accetta" else "whatsapp_rifiutato"
+        iscrizioni_col.update_one({"_id": obj_id}, {"$set": {field: True}})
         return "OK", 200
     except Exception as e:
-        print("Errore aggiornamento stato WhatsApp:", e)
-        return "Errore interno", 500
+        print("Errore aggiornamento whatsapp:", e)
+        return "Errore", 500
 
 # --- Main ---
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
