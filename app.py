@@ -54,6 +54,7 @@ def invia():
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
         "checkin": False,
+        "stato_watsapp": None,
         "timestamp": datetime.datetime.now()
     })
 
@@ -123,12 +124,28 @@ def biglietto(id_iscrizione):
         return "Biglietto non trovato", 404
     
     return render_template('biglietto.html', iscrizione=result)
-    
+
+@app.route('/aggiorna_whatsapp', methods=['POST'])
+def aggiorna_whatsapp():
+    data = request.json
+    iscrizione_id = data.get("id")
+    stato = data.get("stato")  # "accettato" o "rifiutato"
+    try:
+        result = iscrizioni_col.update_one(
+            {"_id": ObjectId(iscrizione_id)},
+            {"$set": {"stato_whatsapp": stato}}
+        )
+        return {"success": True}, 200
+    except Exception as e:
+        print("Errore aggiornamento stato_whatsapp:", e)
+        return {"success": False, "error": str(e)}, 500
+
 # --- Main ---
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
