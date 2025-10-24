@@ -138,6 +138,7 @@
             btn.addEventListener("click", () => {
                 const row = btn.closest("tr");
                 const nome = row.children[1].innerText.trim();
+                const iscrizione_id = row.dataset.it;
                 const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
                 const qrLink = row.querySelector("td:nth-child(9) a");
                 const qrUrl = qrLink ? qrLink.href : "";
@@ -148,6 +149,10 @@
                             `A presto! 🔥`;
 
                 sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
+
+                 // 👇 Aggiorna il DB
+                fetch(`/aggiorna_whatsapp/${iscrizione_id}?esito=accettato`, { method: 'POST' });
+
             });
         });
 
@@ -155,6 +160,7 @@
         document.querySelectorAll(".rifiuta").forEach(btn => {
             btn.addEventListener("click", () => {
                 const row = btn.closest("tr");
+                const iscrizione_id = row.dataset.it;
                 const nome = row.children[1].innerText.trim();
                 const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
 
@@ -163,11 +169,15 @@
                             `Speriamo di rivederti presto a uno dei prossimi eventi! 👋`;
 
                 sendWhatsApp(cellulare, msg, btn, "❌ Rifiutato");
+
+                // 👇 Aggiorna il DB
+                fetch(`/aggiorna_whatsapp/${iscrizione_id}?esito=accettato`, { method: 'POST' });
             });
         });
     });
     </script>
 </body>
 </html>
+
 
 
