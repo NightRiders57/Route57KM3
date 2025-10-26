@@ -111,19 +111,15 @@
                     {% else %}
                         <span style="color: #888;">N/D</span>
                     {% endif %}
-                <td>
-    <button class="accetta"
-        {% if iscrizione.whatsapp_accettato %}
-            disabled class="inviato"
-        {% endif %}>
+               <td>
+    <button class="accetta {% if iscrizione.whatsapp_accettato %}inviato{% endif %}"
+        {% if iscrizione.whatsapp_accettato %}disabled{% endif %}>
         ✅ Accetta
     </button>
 </td>
 <td>
-    <button class="rifiuta"
-        {% if iscrizione.whatsapp_rifiutato %}
-            disabled class="inviato"
-        {% endif %}>
+    <button class="rifiuta {% if iscrizione.whatsapp_rifiutato %}inviato{% endif %}"
+        {% if iscrizione.whatsapp_rifiutato %}disabled{% endif %}>
         ❌ Rifiuta
     </button>
 </td>
