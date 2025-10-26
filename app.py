@@ -130,7 +130,8 @@ def aggiorna_whatsapp(id_iscrizione):
     tipo = request.args.get('tipo')
     if tipo not in ["accetta", "rifiuta"]:
         return "Tipo non valido", 400
-        try:
+        
+    try:
         obj_id = ObjectId(id_iscrizione)
         field = "whatsapp_accettato" if tipo == "accetta" else "whatsapp_rifiutato"
         iscrizioni_col.update_one({"_id": obj_id}, {"$set": {field: True}})
