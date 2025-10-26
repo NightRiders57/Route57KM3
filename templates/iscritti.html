@@ -172,7 +172,7 @@
         document.querySelectorAll(".rifiuta").forEach(btn => {
             btn.addEventListener("click", () => {
                 const row = btn.closest("tr");
-                const iscrizione_id = row.row.getAttribute("data-id");
+                const iscrizione_id = row.getAttribute("data-id");
                 const nome = row.children[1].innerText.trim();
                 const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
 
@@ -190,6 +190,7 @@
     </script>
 </body>
 </html>
+
 
 
 
