@@ -27,11 +27,9 @@ def invia():
     cellulare = request.form['cellulare']
     email = request.form['email']
     auto = request.form['auto']
+    targa = request.form['targa']
     club = request.form.get('club', '')
     clubs = request.form['clubs']
-    passeggeri = request.form['passeggeri']
-    brioches = request.form['brioches']
-    intolleranze = request.form.get('intolleranze', '')
 
     # --- Salva le foto in GridFS ---
     foto1_file = request.files['foto1']
@@ -46,11 +44,9 @@ def invia():
         "cellulare": cellulare,
         "email": email,
         "auto": auto,
+        "targa": targa,
         "club": club,
         "clubs": clubs,
-        "passeggeri": passeggeri,
-        "brioches": brioches,
-        "intolleranze": intolleranze,
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
         "checkin": False,
