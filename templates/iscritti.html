@@ -150,7 +150,7 @@
                 const nome = row.children[1].innerText.trim();
                 const iscrizione_id = row.getAttribute("data-id");
                 const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
-                const qrLink = row.querySelector("td:nth-child(9) a");
+                const qrLink = row.querySelector("td:nth-child(15) a");
                 const qrUrl = qrLink ? qrLink.href : "";
 
                 const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
