@@ -53,7 +53,7 @@ foto1_file = request.files['foto1']
 foto2_file = request.files['foto2']
 
 foto1_id = salva_immagine_ridotta(foto1_file, nome, cognome)
-foto2_id = salva_immagine_ridotta(foto2_file, nome, cognome)
+foto2_id = salva_immagine_ridotta(foto2_file, nome, cognome)
 
     # --- Salva i dati nel database (senza QR per ora) ---
     result = iscrizioni_col.insert_one({
