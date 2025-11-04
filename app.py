@@ -135,6 +135,21 @@ def aggiorna_whatsapp(id_iscrizione):
     except Exception as e:
         print("Errore aggiornamento whatsapp:", e)
         return "Errore", 500
+    
+    @app.route('/reset_db', methods=['POST'])
+def reset_db():
+    password = request.form.get("password_reset", "")
+    if password != "Nightriders2025":    # usa la stessa PSW della pagina admin
+        return "Accesso negato", 403
+
+    try:
+        iscrizioni_col.drop()     # elimina iscrizioni
+        db.fs.files.drop()        # elimina file GridFS
+        db.fs.chunks.drop()       # elimina chunks GridFS
+        return "✅ Database completamente resettato!"
+    except Exception as e:
+        print("ERRORE RESET:", e)
+        return "Errore reset database", 500
 
 # --- Main ---
 if __name__ == '__main__':
