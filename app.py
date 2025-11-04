@@ -136,7 +136,7 @@ def aggiorna_whatsapp(id_iscrizione):
         print("Errore aggiornamento whatsapp:", e)
         return "Errore", 500
     
-    @app.route('/reset_db', methods=['POST'])
+@app.route('/reset_db', methods=['POST'])
 def reset_db():
     password = request.form.get("password_reset", "")
     if password != "Nightriders2025":    # usa la stessa PSW della pagina admin
