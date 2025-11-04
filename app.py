@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, send_file
 from pymongo import MongoClient, ReturnDocument
 from bson.objectid import ObjectId
 import gridfs
-from io import BytesIO
+import io
+from PIL import Image
 import datetime
 import qrcode
 
@@ -32,10 +33,27 @@ def invia():
     clubs = request.form['clubs']
 
     # --- Salva le foto in GridFS ---
-    foto1_file = request.files['foto1']
-    foto2_file = request.files['foto2']
-    foto1_id = fs.put(foto1_file, filename=f"foto1_{nome}_{cognome}")
-    foto2_id = fs.put(foto2_file, filename=f"foto2_{nome}_{cognome}")
+    # --- Salva le foto in GridFS con compressione e resize ---
+def salva_immagine_ridotta(file, nome, cognome):
+    img = Image.open(file)
+
+    # Ridimensiona (esempio: max 1280px lato lungo)
+    max_size = 1280
+    img.thumbnail((max_size, max_size))
+
+    # Converti in JPG e comprimi
+    buffer = io.BytesIO()
+    img.save(buffer, format="JPEG", quality=70, optimize=True)
+
+    buffer.seek(0)  # Torna all'inizio del buffer
+
+    return fs.put(buffer, filename=f"foto_{nome}_{cognome}.jpg")
+
+foto1_file = request.files['foto1']
+foto2_file = request.files['foto2']
+
+foto1_id = salva_immagine_ridotta(foto1_file, nome, cognome)
+foto2_id = salva_immagine_ridotta(foto2_file, nome, cognome)
 
     # --- Salva i dati nel database (senza QR per ora) ---
     result = iscrizioni_col.insert_one({
