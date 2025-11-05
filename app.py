@@ -72,48 +72,15 @@ def invia():
         "timestamp": datetime.datetime.now()
     })
 
-    # --- Prendi l'_id generato da MongoDB ---
     iscrizione_id = str(result.inserted_id)
 
-    # --- Genera QR + locandina ---
     qr_data = f"https://route57km3.onrender.com/biglietto/{iscrizione_id}"
-
-    qr = qrcode.QRCode(
-        version=2,
-        error_correction=qrcode.constants.ERROR_CORRECT_H,
-        box_size=10,
-        border=2,
-    )
-    qr.add_data(qr_data)
-    qr.make(fit=True)
-
-    qr_img = qr.make_image(fill_color="black", back_color="white").convert("RGB")
-
-    # ✅ Carica locandina (assicurati che sia in /static/img/)
-    poster = Image.open("static/img/locandina.png")
-
-    # ✅ Mantiene locandina a 500x300
-    poster = poster.resize((500, 300))
-
-    # ✅ Ridimensiona il QR (puoi aumentare o diminuire)
-    qr_size = 180
-    qr_img = qr_img.resize((qr_size, qr_size))
-
-    # ✅ Posizione BASSO DESTRA
-    margin = 10
-    x = poster.width - qr_img.width - margin
-    y = poster.height - qr_img.height - margin
-
-    poster.paste(qr_img, (x, y))
-
-    # ✅ Salva in GridFS
+    qr_img = qrcode.make(qr_data)
     qr_bytes = BytesIO()
-    poster.save(qr_bytes, format="PNG")
+    qr_img.save(qr_bytes, format="PNG")
     qr_bytes.seek(0)
-
     qr_id = fs.put(qr_bytes, filename=f"QR_{nome}_{cognome}.png")
 
-    # ✅ Aggiorna documento Mongo con qr_id
     iscrizioni_col.update_one(
         {"_id": result.inserted_id},
         {"$set": {"qr_id": qr_id}}
@@ -121,7 +88,6 @@ def invia():
 
     messaggio = f"Ciao {nome}, la tua iscrizione all’evento NOVEMBER RIDERS è stata ricevuta! 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
-
 
 # --- Mostra iscritti (con password semplice) ---
 @app.route('/login', methods=['GET', 'POST'])
