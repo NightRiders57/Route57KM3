@@ -4,18 +4,50 @@
     <meta charset="UTF-8">
     <title>Biglietto {{ iscrizione.nome }}</title>
     <style>
-        body { font-family: Arial; background: #000; color: #fff; text-align:center; padding:50px; }
-        h1 { color: #ff6600; }
-        .box { border: 2px solid #ff6600; padding: 20px; display:inline-block; border-radius:10px; }
+        body {
+            font-family: Arial;
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+            background: url('/static/img/locandina.jpg') no-repeat center center fixed;
+            background-size: cover; /* 👉 fa riempire tutta la pagina */
+        }
+
+        h1 {
+            color: #ff6600;
+            margin-bottom: 15px;
+        }
+
+        .box {
+            background: rgba(0, 0, 0, 0.65); /* 👉 sfondo trasparente per leggibilità */
+            border: 2px solid #ff6600;
+            padding: 25px;
+            display: inline-block;
+            border-radius: 15px;
+            backdrop-filter: blur(4px);
+        }
+
+        img {
+            margin-top: 15px;
+            width: 250px;
+        }
     </style>
 </head>
 <body>
+
     <div class="box">
-        <h1>Biglietto Night Riders</h1>
+        <h1>Biglietto November Meet</h1>
+
         <p><strong>Nome:</strong> {{ iscrizione.nome }}</p>
         <p><strong>Cognome:</strong> {{ iscrizione.cognome }}</p>
         <p><strong>Targa:</strong> {{ iscrizione.targa }}</p>
-        <p>Presenta questo biglietto all'evento!</p>
+        <p>Presenta questo biglietto all'ingresso ✅</p>
+
+        <!-- QR CODE -->
+        {% if iscrizione.qr_id %}
+            <img src="/qr/{{ iscrizione.qr_id }}" alt="QR Code">
+        {% endif %}
     </div>
+
 </body>
 </html>
