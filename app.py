@@ -8,7 +8,7 @@ from PIL import Image
 import datetime
 import qrcode
 
-app = Flask(_name_, template_folder='templates', static_folder='static')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 
 # --- MongoDB Atlas ---
 MONGO_URI = "mongodb+srv://francescofittaiolo_db_user:Chloe16@cluster0.nrsedvh.mongodb.net/nightriders?retryWrites=true&w=majority&appName=Cluster0"
@@ -170,7 +170,7 @@ def reset_db():
         return "Errore reset database", 500
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
