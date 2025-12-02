@@ -127,20 +127,28 @@ def biglietto(id_iscrizione):
     except Exception:
         return "ID non valido", 400
 
+    #  Recupero il documento
+    iscrizione = iscrizioni_col.find_one({"_id": obj_id})
+
+    if not iscrizione:
+        return "Biglietto non trovato", 404
+
+    #  SE È GIÀ SCANSIONATO → MOSTRA LA PAGINA DEDICATA
+    if iscrizione.get("checkin") == True:
+        return render_template("gia_scansionato.html", iscrizione=iscrizione)
+
+    #  ALTRIMENTI aggiorno checkin a True (prima scansione)
     try:
-        result = iscrizioni_col.find_one_and_update(
+        iscrizioni_col.update_one(
             {"_id": obj_id},
-            {"$set": {"checkin": True}},
-            return_document=True
+            {"$set": {"checkin": True}}
         )
     except Exception as e:
         print("Errore aggiornamento checkin:", e)
         return "Errore interno", 500
 
-    if not result:
-        return "Biglietto non trovato", 404
-
-    return render_template('biglietto.html', iscrizione=result)
+    #  Mostro il biglietto
+    return render_template('biglietto.html', iscrizione=iscrizione)
 
 
 @app.route('/aggiorna_whatsapp/<id_iscrizione>', methods=['POST'])

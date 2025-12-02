@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>QR già scansionato</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .box {
+            border: 2px solid #ff6600;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #ff6600;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .warning {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #ff6600;
+        }
+
+        .nome {
+            font-weight: bold;
+            font-size: 22px;
+            margin-top: 10px;
+        }
+
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <div class="warning">⚠</div>
+        <h1>QR già scansionato</h1>
+
+        <p class="subtitle">Questo ticket è già stato registrato al check-in.</p>
+
+        <p class="nome">
+            {{ iscrizione.nome }} {{ iscrizione.cognome }}
+        </p>
+
+        <p>Se pensi che ci sia un errore, contatta lo staff.</p>
+    </div>
+
+</body>
+</html>
