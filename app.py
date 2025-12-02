@@ -96,7 +96,13 @@ def login():
         password = request.form['password']
         if password == "Nightriders2025":
             iscritti = list(iscrizioni_col.find())
-            return render_template('iscritti.html', iscritti=iscritti)
+
+            totale = len(iscritti)
+            checkin_effettuati = sum(1 for i in iscritti if i.get("checkin"))
+            totale_accetati = sum(1 for i in iscritti if i.get("whatsapp_accettato"))
+            totale_rifiutati = sum(1 for i in iscritti if i.get("whatsapp_rifiutato"))
+
+            return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accetati=totale_accetati, totale_rifiutati=totale_rifiutati)
         else:
             return "Password errata", 401
     return render_template('login.html')
