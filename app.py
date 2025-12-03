@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, send_file
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from openpyxl import Workbook
 import gridfs
 import io
 from io import BytesIO
@@ -181,6 +182,43 @@ def reset_db():
     except Exception as e:
         print("ERRORE RESET:", e)
         return "Errore reset database", 500
+    
+@app.route('/export_checkin')
+def export_checkin():
+    # Preleva solo gli utenti con check-in effettuato
+    iscritti = list(iscrizioni_col.find({"checkin": True}))
+
+    # Crea un file Excel in memoria
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Check-in"
+
+    # Intestazioni colonne
+    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa"])
+
+    # Inserimento dati
+    for i in iscritti:
+        ws.append([
+            i.get("nome", ""),
+            i.get("cognome", ""),
+            i.get("email", ""),
+            i.get("cellulare", ""),
+            i.get("auto", ""),
+            i.get("targa", "")
+        ])
+
+    # Salva il file in memoria
+    file_stream = io.BytesIO()
+    wb.save(file_stream)
+    file_stream.seek(0)
+
+    # Invia il file al browser per il download
+    return send_file(
+        file_stream,
+        as_attachment=True,
+        download_name="checkin.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )    
 
 
 if __name__ == '__main__':

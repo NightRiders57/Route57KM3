@@ -68,6 +68,11 @@
         <strong>Accettati:</strong> {{ totale_accettati }}<br>
         <strong>Rifiutati:</strong> {{ totale_rifiutati }}
     </div>
+    <a href="/export_checkin">
+    <button style="margin-top: 10px; background:#ff6600; color:white; padding:10px; border:none; border-radius:5px;">
+        📥 Esporta Check-In
+    </button>
+    </a>
     <form action="/reset_db" method="POST" onsubmit="return confirm('⚠ ATTENZIONE! Verrà eliminato TUTTO. Sei sicuro?')">
     <input type="hidden" name="password_reset" value="Nightriders2025">
     <button type="submit" style="background:red;color:white;padding:10px;border:none;border-radius:5px;">
