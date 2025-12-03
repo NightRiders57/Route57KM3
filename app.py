@@ -218,7 +218,7 @@ def export_checkin():
         as_attachment=True,
         download_name="checkin.xlsx",
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )    
+    )    
 
 
 if __name__ == '__main__':
