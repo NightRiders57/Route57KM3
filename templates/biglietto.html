@@ -47,6 +47,11 @@
         {% if iscrizione.qr_id %}
             <img src="/qr/{{ iscrizione.qr_id }}" alt="QR Code">
         {% endif %}
+        
+        <!-- Foto -->
+        {% if iscrizione.foto1_id %}
+            <img src="/foto/{{ iscrizione.foto1_id }}" alt="Foto 1">
+        {% endif %}
     </div>
 
 </body>
