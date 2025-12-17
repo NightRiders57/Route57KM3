@@ -87,7 +87,7 @@ def invia():
         {"$set": {"qr_id": qr_id}}
     )
 
-    messaggio = f"Ciao {nome}, la tua iscrizione all’evento NOVEMBER RIDERS è stata ricevuta! 🤘"
+    messaggio = f"Ciao {nome}, la tua iscrizione all’evento PITLANE 57 è stata ricevuta! 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
 
 # --- Mostra iscritti (con password semplice) ---
