@@ -47,7 +47,7 @@ def invia():
     email = request.form['email']
     auto = request.form['auto']
     targa = request.form['targa']
-    club = request.form.get('club', '')
+    pista = request.form.get('pista', '')
     clubs = request.form['clubs']
 
     # ✅ correttamente dentro la funzione
@@ -64,7 +64,7 @@ def invia():
         "email": email,
         "auto": auto,
         "targa": targa,
-        "club": club,
+        "pista": pista,
         "clubs": clubs,
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
