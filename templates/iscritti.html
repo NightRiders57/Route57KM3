@@ -94,6 +94,7 @@
                 <th>QR Code</th>
                 <th>Pista</th>
                 <th>Accetta</th>
+                <th>Accetta Pista</th>
                 <th>Rifiuta</th>
                 
             </tr>
@@ -137,6 +138,12 @@
 <td>
     <button class="accetta {% if iscrizione.whatsapp_accettato %}inviato{% endif %}"
         {% if iscrizione.whatsapp_accettato %}disabled{% endif %}>
+        ✅ Accetta
+    </button>
+</td>
+<td>
+    <button class="accetta_pista {% if iscrizione.whatsapp_accettato_pista %}inviato{% endif %}"
+        {% if iscrizione.whatsapp_accettato_pista %}disabled{% endif %}>
         ✅ Accetta
     </button>
 </td>
@@ -187,6 +194,31 @@
             });
         });
 
+        // ACCETTA PISTA
+        document.querySelectorAll(".accetta_pista").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const row = btn.closest("tr");
+                const nome = row.children[1].innerText.trim();
+                const iscrizione_id = row.getAttribute("data-id");
+                const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
+                const qrLink = row.querySelector("td:nth-child(10) a");
+                const qrUrl = qrLink ? qrLink.href : "";
+
+                const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
+                            `Ti aspettiamo il 1° Marzo all’evento *PitLane 57*!%0A` +
+                            `Invia un watsapp al numero +39 3331234567 per la prenotazione.%0A` +
+                            `In allegato tutte troverai la lista ed i costi dei turni!%0A` +
+                            `Mostra questo QR all’ingresso:%0A${qrUrl}%0A%0A` +
+                            `A presto! 🔥`;
+
+                sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
+
+                 // 👇 Aggiorna il DB
+                fetch(`/aggiorna_whatsapp/${iscrizione_id}?tipo=accetta`, { method: 'POST' });
+
+            });
+        });
+
         // RIFIUTA
         document.querySelectorAll(".rifiuta").forEach(btn => {
             btn.addEventListener("click", () => {
@@ -196,7 +228,7 @@
                 const cellulare = row.children[4].innerText.trim().replace(/\s+/g, '');
 
                 const msg = `Ciao ${nome}, grazie per la tua iscrizione. 🚗💨%0A` +
-                            `Purtroppo la tua partecipazione non è stata accettata per questa edizione.%0A%0A` +
+                            `Purtroppo la tua partecipazione non è stata accettata per questo evento.%0A%0A` +
                             `Speriamo di rivederti presto a uno dei prossimi eventi! 👋`;
 
                 sendWhatsApp(cellulare, msg, btn, "❌ Rifiutato");
