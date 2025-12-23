@@ -181,9 +181,11 @@
                 const qrLink = row.querySelector("td:nth-child(10) a");
                 const qrUrl = qrLink ? qrLink.href : "";
 
+                const bigliettoUrl = `https://nightriders57.it/biglietto/${iscrizione_id}`;
+
                 const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
                             `Ti aspettiamo il 1° Marzo all’evento *PitLane 57*!%0A` +
-                            `Mostra questo QR all’ingresso:%0A${qrUrl}%0A%0A` +
+                            `Mostra il biglietto all’ingresso:%0A${bigliettoUrl}%0A%0A` +
                             `A presto! 🔥`;
 
                 sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
@@ -204,11 +206,13 @@
                 const qrLink = row.querySelector("td:nth-child(10) a");
                 const qrUrl = qrLink ? qrLink.href : "";
 
+                const bigliettoUrl = `https://nightriders57.it/biglietto/${iscrizione_id}`;
+
                 const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
                             `Ti aspettiamo il 1° Marzo all’evento *PitLane 57*!%0A` +
                             `Invia un watsapp al numero +39 3331234567 per la prenotazione.%0A` +
                             `In allegato tutte troverai la lista ed i costi dei turni!%0A` +
-                            `Mostra questo QR all’ingresso:%0A${qrUrl}%0A%0A` +
+                            `Mostra il biglietto all’ingresso:%0A${bigliettoUrl}%0A%0A` +
                             `A presto! 🔥`;
 
                 sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
