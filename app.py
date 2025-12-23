@@ -75,7 +75,7 @@ def invia():
 
     iscrizione_id = str(result.inserted_id)
 
-    qr_data = f"https://route57km3.onrender.com/biglietto/{iscrizione_id}"
+    qr_data = f"https://route57km3.onrender.com/checkin/{iscrizione_id}"
     qr_img = qrcode.make(qr_data)
     qr_bytes = BytesIO()
     qr_img.save(qr_bytes, format="PNG")
@@ -135,21 +135,44 @@ def biglietto(id_iscrizione):
         return "Biglietto non trovato", 404
 
     #  SE È GIÀ SCANSIONATO → MOSTRA LA PAGINA DEDICATA
-    if iscrizione.get("checkin") == True:
-        return render_template("gia_scansionato.html", iscrizione=iscrizione)
+    #if iscrizione.get("checkin") == True:
+    #    return render_template("gia_scansionato.html", iscrizione=iscrizione)
 
     #  ALTRIMENTI aggiorno checkin a True (prima scansione)
-    try:
-        iscrizioni_col.update_one(
-            {"_id": obj_id},
-            {"$set": {"checkin": True}}
-        )
-    except Exception as e:
-        print("Errore aggiornamento checkin:", e)
-        return "Errore interno", 500
+    #try:
+    #    iscrizioni_col.update_one(
+    #        {"_id": obj_id},
+    #        {"$set": {"checkin": True}}
+    #    )
+    #except Exception as e:
+    #    print("Errore aggiornamento checkin:", e)
+    #    return "Errore interno", 500
 
     #  Mostro il biglietto
     return render_template('biglietto.html', iscrizione=iscrizione)
+
+@app.route('/checkin/<id_iscrizione>')
+def checkin(id_iscrizione):
+    try:
+        obj_id = ObjectId(id_iscrizione)
+    except:
+        return "ID non valido", 400
+
+    iscrizione = iscrizioni_col.find_one({"_id": obj_id})
+    if not iscrizione:
+        return "Biglietto non trovato", 404
+
+    # 🚫 già scansionato
+    if iscrizione.get("checkin") is True:
+        return render_template("gia_scansionato.html", iscrizione=iscrizione)
+
+    # ✅ primo check-in
+    iscrizioni_col.update_one(
+        {"_id": obj_id},
+        {"$set": {"checkin": True, "checkin_time": datetime.datetime.now()}}
+    )
+
+    return render_template("checkin_ok.html", iscrizione=iscrizione)
 
 
 @app.route('/aggiorna_whatsapp/<id_iscrizione>', methods=['POST'])
