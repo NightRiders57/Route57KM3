@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Biglietto {{ iscrizione.nome }}</title>
+    <style>
+        body {
+            font-family: Arial;
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+            background: url('/static/locandina1.jpg') no-repeat center center fixed;
+            background-size: cover; /* 👉 fa riempire tutta la pagina */
+        }
+
+        h1 {
+            color: #f49529;
+            margin-bottom: 15px;
+        }
+
+        .box {
+            background: rgba(0, 0, 0, 0.65); /* 👉 sfondo trasparente per leggibilità */
+            border: 2px solid #f49529;
+            padding: 25px;
+            display: inline-block;
+            border-radius: 15px;
+            backdrop-filter: blur(4px);
+        }
+
+        img {
+            margin-top: 15px;
+            width: 250px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h1>Biglietto PitLane 57</h1>
+
+        <p><strong>Nome:</strong> {{ iscrizione.nome }}</p>
+        <p><strong>Cognome:</strong> {{ iscrizione.cognome }}</p>
+        <p><strong>Targa:</strong> {{ iscrizione.targa }}</p>
+
+        <!-- Foto 1 -->
+        {% if iscrizione.foto1_id %}
+            <img src="/foto/{{ iscrizione.foto1_id }}" alt="Foto 1">
+        {% endif %}
+
+        <!-- Foto 2 -->
+        {% if iscrizione.foto2_id %}
+            <img src="/foto/{{ iscrizione.foto2_id }}" alt="Foto 2">
+        {% endif %}
+    </div>
+
+</body>
+</html>
