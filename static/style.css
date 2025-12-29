@@ -84,17 +84,20 @@ button:hover {
 }
 
 .whatsapp-btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 20px;
-    background-color: #25D366;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 8px;
-    text-align: center;
+  display: block;
+  width: 95%;
+  padding: 10px;
+  background-color: #f49529;
+  color: #fff;
+  border-radius: 6px;
+  margin-top: 15px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  line-height: 1.1;
 }
 
 .whatsapp-btn:hover {
-    background-color: #1ebe5d;
+  background-color: #ff8800;
 }
