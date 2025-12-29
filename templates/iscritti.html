@@ -93,6 +93,7 @@
                 <th>Foto 2</th>
                 <th>QR Code</th>
                 <th>Pista</th>
+                <th>Nick</th>
                 <th>Accetta</th>
                 <th>Accetta Pista</th>
                 <th>Rifiuta</th>
@@ -135,6 +136,7 @@
                     {% endif %}
                 </td>
                 <td>{{ iscrizione.pista }}</td>
+                <td>{{ iscrizione.instagram }}</td>
 <td>
     <button class="accetta {% if iscrizione.whatsapp_accettato %}inviato{% endif %}"
         {% if iscrizione.whatsapp_accettato %}disabled{% endif %}>
@@ -211,7 +213,7 @@
 
                 const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
                             `Ti aspettiamo il 1° Marzo all’evento *PitLane 57*!%0A` +
-                            `Invia un Whatsapp al numero 3515486141 per la prenotazione del turno.%0A` +
+                            `Invia un WhatsApp al numero 3515486141 per la prenotazione del turno indicando che sei iscritto tramite NightRiders con il turno scelto.%0A` +
                             `In allegato troverai la lista ed i costi dei vari turni!%0A` +
                             `Il giorno dell'evento mostra il biglietto all’ingresso:%0A${bigliettoUrl}%0A%0A` +
                             `A presto! 🔥`;
