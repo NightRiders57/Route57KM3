@@ -48,7 +48,7 @@ def invia():
     auto = request.form['auto']
     targa = request.form['targa']
     pista = request.form.get('pista', '')
-    clubs = request.form['clubs']
+    instagram = request.form['instagram']
 
     # ✅ correttamente dentro la funzione
     foto1_file = request.files['foto1']
@@ -65,7 +65,7 @@ def invia():
         "auto": auto,
         "targa": targa,
         "pista": pista,
-        "clubs": clubs,
+        "instagram": instagram,
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
         "checkin": False,
