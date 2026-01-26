@@ -97,6 +97,7 @@
                 <th>Accetta</th>
                 <th>Accetta Pista</th>
                 <th>Rifiuta</th>
+                <th>Invia Staff</th>
                 
             </tr>
         </thead>
@@ -154,6 +155,9 @@
         {% if iscrizione.whatsapp_rifiutato %}disabled{% endif %}>
         ❌ Rifiuta
     </button>
+</td>
+<td>
+    <button class="invia_staff">Invia Staff</button>
 </td>
             {% endfor %}
         </tbody>
@@ -244,6 +248,38 @@
                 fetch(`/aggiorna_whatsapp/${iscrizione_id}?tipo=rifiuta`, { method: 'POST' });
             });
         });
+
+        // INVIA STAFF
+        
+        document.querySelectorAll(".invia_staff").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const row = btn.closest("tr");
+
+                const nome = row.children[1].innerText.trim();
+                const cognome = row.children[2].innerText.trim();
+                const auto = row.children[5].innerText.trim();
+                const targa = row.children[6].innerText.trim();
+                const nick = row.children[11].innerText.trim();
+
+                const foto1 = row.querySelector("td:nth-child(8) a")?.href || "";
+
+                const cellulareStaff = "3513048891"; 
+
+               const msg =
+                   `NUOVA ISCRIZIONE:%0A%0A` +
+                   `Nome: ${nome} ${cognome}%0A` +
+                   `Auto: ${auto}%0A` +
+                   `Targa: ${targa}%0A` +
+                   `Nick: ${nick}%0A%0A` +
+                   `Foto:%0A${foto1}%0A%0A`;
+
+            window.open(`https://wa.me/${cellulareStaff}?text=${msg}`, "_blank");
+
+            bnt.innerText = "✅ Inviato";
+            btn.classList.add("inviato");
+            btn.disabled = true;
+            });
+       });
     });
     </script>
 </body>
