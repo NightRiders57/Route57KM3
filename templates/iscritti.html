@@ -93,6 +93,8 @@
                 <th>Foto 2</th>
                 <th>QR Code</th>
                 <th>Intolleranze</th>
+                <th>Passeggeri</th>
+                <th>Andatura</th>
                 <th>Nick</th>
                 <th>Accetta</th>
                 <th>Accetta Pista</th>
@@ -137,6 +139,8 @@
                     {% endif %}
                 </td>
                 <td>{{ iscrizione.intolleranze }}</td>
+                <td>{{ iscrizione.passeggeri }}</td>
+                <td>{{ iscrizione.andatura }}</td>
                 <td>{{ iscrizione.instagram }}</td>
 <td>
     <button class="accetta {% if iscrizione.whatsapp_accettato %}inviato{% endif %}"
@@ -259,7 +263,7 @@
                 const cognome = row.children[2].innerText.trim();
                 const auto = row.children[5].innerText.trim();
                 const targa = row.children[6].innerText.trim();
-                const nick = row.children[11].innerText.trim();
+                const nick = row.children[13].innerText.trim();
 
                 const foto1 = row.querySelector("td:nth-child(8) a")?.href || "";
 
@@ -275,7 +279,7 @@
 
             window.open(`https://wa.me/${cellulareStaff}?text=${msg}`, "_blank");
 
-            bnt.innerText = "✅ Inviato";
+            btn.innerText = "✅ Inviato";
             btn.classList.add("inviato");
             btn.disabled = true;
             });

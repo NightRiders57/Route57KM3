@@ -48,6 +48,8 @@ def invia():
     auto = request.form['auto']
     targa = request.form['targa']
     intolleranze = request.form.get('intolleranze', '')
+    passeggeri = request.form['passeggeri']
+    andatura = request.form.get('andatura', '')
     instagram = request.form['instagram']
 
     # ✅ correttamente dentro la funzione
@@ -65,6 +67,8 @@ def invia():
         "auto": auto,
         "targa": targa,
         "intolleranze": intolleranze,
+        "passeggeri": passeggeri,
+        "andatura": andatura,
         "instagram": instagram,
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
