@@ -91,6 +91,9 @@ def invia():
         {"$set": {"qr_id": qr_id}}
     )
 
+    if iscrizioni_col.find_one({"email": email}):
+       return "Sei già iscritto, verrai contattato per l'esito", 400
+
     messaggio = f"Ciao {nome}, la tua iscrizione all’evento Route57 KM.3 è stata ricevuta! 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
 
@@ -247,7 +250,6 @@ def export_checkin():
         download_name="checkin.xlsx",
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )    
-
 
 if __name__ == '__main__':
     import os
