@@ -47,7 +47,7 @@ def invia():
     email = request.form['email']
     auto = request.form['auto']
     targa = request.form['targa']
-    pista = request.form.get('pista', '')
+    intolleranze = request.form.get('intolleranze', '')
     instagram = request.form['instagram']
 
     # ✅ correttamente dentro la funzione
@@ -64,7 +64,7 @@ def invia():
         "email": email,
         "auto": auto,
         "targa": targa,
-        "pista": pista,
+        "intolleranze": intolleranze,
         "instagram": instagram,
         "foto1_id": foto1_id,
         "foto2_id": foto2_id,
@@ -87,7 +87,7 @@ def invia():
         {"$set": {"qr_id": qr_id}}
     )
 
-    messaggio = f"Ciao {nome}, la tua iscrizione all’evento PITLANE 57 è stata ricevuta! 🤘"
+    messaggio = f"Ciao {nome}, la tua iscrizione all’evento Route57 KM.3 è stata ricevuta! 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
 
 # --- Mostra iscritti (con password semplice) ---
@@ -95,7 +95,7 @@ def invia():
 def login():
     if request.method == 'POST':
         password = request.form['password']
-        if password == "Nightriders2025":
+        if password == "Nightriders2026":
             iscritti = list(iscrizioni_col.find())
 
             totale = len(iscritti)
@@ -194,7 +194,7 @@ def aggiorna_whatsapp(id_iscrizione):
 @app.route('/reset_db', methods=['POST'])
 def reset_db():
     password = request.form.get("password_reset", "")
-    if password != "Nightriders2025":
+    if password != "Nightriders2026":
         return "Accesso negato", 403
 
     try:
@@ -217,7 +217,7 @@ def export_checkin():
     ws.title = "Check-in"
 
     # Intestazioni colonne
-    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa"])
+    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa", "Intolleranze"])
 
     # Inserimento dati
     for i in iscritti:
@@ -227,7 +227,8 @@ def export_checkin():
             i.get("email", ""),
             i.get("cellulare", ""),
             i.get("auto", ""),
-            i.get("targa", "")
+            i.get("targa", ""),
+            i.get("intolleranze", "")
         ])
 
     # Salva il file in memoria

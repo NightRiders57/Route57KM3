@@ -74,7 +74,7 @@
     </button>
     </a>
     <form action="/reset_db" method="POST" onsubmit="return confirm('⚠ ATTENZIONE! Verrà eliminato TUTTO. Sei sicuro?')">
-    <input type="hidden" name="password_reset" value="Nightriders2025">
+    <input type="hidden" name="password_reset" value="Nightriders2026">
     <button type="submit" style="background:red;color:white;padding:10px;border:none;border-radius:5px;">
         🗑 RESET DATABASE
     </button>
@@ -92,7 +92,7 @@
                 <th>Foto 1</th>
                 <th>Foto 2</th>
                 <th>QR Code</th>
-                <th>Pista</th>
+                <th>Intolleranze</th>
                 <th>Nick</th>
                 <th>Accetta</th>
                 <th>Accetta Pista</th>
@@ -136,7 +136,7 @@
                         <span style="color: #888;">N/D</span>
                     {% endif %}
                 </td>
-                <td>{{ iscrizione.pista }}</td>
+                <td>{{ iscrizione.intolleranze }}</td>
                 <td>{{ iscrizione.instagram }}</td>
 <td>
     <button class="accetta {% if iscrizione.whatsapp_accettato %}inviato{% endif %}"
@@ -190,7 +190,7 @@
                 const bigliettoUrl = `https://iscrizioni.nightriders57.it/biglietto/${iscrizione_id}`;
 
                 const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
-                            `Ti aspettiamo il 1° Marzo all’evento *PitLane 57*!%0A` +
+                            `Ti aspettiamo il 28 Giugno all’evento *Route57 KM.3*!%0A` +
                             `Per il pagamento della quota di ingresso ti verranno fornite le informazioni.%0A` +
                             `Mostra il biglietto all’ingresso:%0A${bigliettoUrl}%0A%0A` +
                             `A presto! 🔥`;
@@ -216,7 +216,7 @@
                 const bigliettoUrl = `https://iscrizioni.nightriders57.it/biglietto/${iscrizione_id}`;
 
                 const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
-                            `Ti aspettiamo il 1° Marzo all’evento *PitLane 57*!%0A` +
+                            `Ti aspettiamo il 28 Giugno all’evento *Route57 KM.3*!%0A` +
                             `Invia un WhatsApp al numero 3515486141 per la prenotazione del turno indicando che sei iscritto tramite NightRiders con il turno scelto.%0A` +
                             `In allegato troverai la lista ed i costi dei vari turni!%0A` +
                             `Il giorno dell'evento mostra il biglietto all’ingresso:%0A${bigliettoUrl}%0A%0A` +
