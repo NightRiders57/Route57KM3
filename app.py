@@ -91,9 +91,6 @@ def invia():
         {"$set": {"qr_id": qr_id}}
     )
 
-    if iscrizioni_col.find_one({"email": email}):
-       return "Sei già iscritto, verrai contattato per l'esito", 400
-
     messaggio = f"Ciao {nome}, la tua iscrizione all’evento Route57 KM.3 è stata ricevuta! 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
 
