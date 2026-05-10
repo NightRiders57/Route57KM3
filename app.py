@@ -106,7 +106,11 @@ def login():
             checkin_effettuati = sum(1 for i in iscritti if i.get("checkin"))
             totale_accettati = sum(1 for i in iscritti if i.get("whatsapp_accettato"))
             totale_rifiutati = sum(1 for i in iscritti if i.get("whatsapp_rifiutato"))
-            totale_passeggeri = sum(int(i.get("passeggeri",1)) for i in iscritti)
+            totale_passeggeri = sum(
+                int(i.get("passeggeri",1)) 
+                for i in iscritti
+                if i.get("whatsapp_accettato")
+                )
 
             return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri)
         else:
