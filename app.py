@@ -256,7 +256,9 @@ def export_checkin():
 @app.route('/export_iscrizioni')
 def export_iscrizioni():
     
-    iscritti = list(iscrizioni_col.find())
+    iscritti = list(iscrizioni_col.find({
+        "whatsapp_accettato": True
+    }))
     # Crea un file Excel in memoria
     wb = Workbook()
     ws = wb.active
