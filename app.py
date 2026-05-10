@@ -106,8 +106,9 @@ def login():
             checkin_effettuati = sum(1 for i in iscritti if i.get("checkin"))
             totale_accettati = sum(1 for i in iscritti if i.get("whatsapp_accettato"))
             totale_rifiutati = sum(1 for i in iscritti if i.get("whatsapp_rifiutato"))
+            totale_passeggeri = sum(int(i.get("passeggeri",1)) for i in iscritti)
 
-            return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati)
+            return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri)
         else:
             return "Password errata", 401
     return render_template('login.html')
@@ -247,6 +248,43 @@ def export_checkin():
         download_name="checkin.xlsx",
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )    
+
+@app.route('/export_iscrizioni')
+def export_iscrizioni():
+    
+    iscritti = list()
+    # Crea un file Excel in memoria
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Iscrizioni"
+
+    # Intestazioni colonne
+    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa", "Intolleranze"])
+
+    # Inserimento dati
+    for i in iscritti:
+        ws.append([
+            i.get("nome", ""),
+            i.get("cognome", ""),
+            i.get("email", ""),
+            i.get("cellulare", ""),
+            i.get("auto", ""),
+            i.get("targa", ""),
+            i.get("intolleranze", "")
+        ])
+
+    # Salva il file in memoria
+    file_stream = io.BytesIO()
+    wb.save(file_stream)
+    file_stream.seek(0)
+
+    # Invia il file al browser per il download
+    return send_file(
+        file_stream,
+        as_attachment=True,
+        download_name="iscrizioni.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )   
 
 if __name__ == '__main__':
     import os
