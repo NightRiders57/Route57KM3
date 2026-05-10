@@ -252,7 +252,7 @@ def export_checkin():
 @app.route('/export_iscrizioni')
 def export_iscrizioni():
     
-    iscritti = list()
+    iscritti = list(iscrizioni_col.find())
     # Crea un file Excel in memoria
     wb = Workbook()
     ws = wb.active
