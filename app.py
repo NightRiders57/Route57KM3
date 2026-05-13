@@ -8,6 +8,7 @@ from io import BytesIO
 from PIL import Image
 import datetime
 import qrcode
+import requests
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -17,6 +18,8 @@ client = MongoClient(MONGO_URI)
 db = client.nightriders
 fs = gridfs.GridFS(db)
 iscrizioni_col = db.iscrizioni
+TELEGRAM_TOKEN = "8910850640:AAFZb5KlkUYfmoDo6alZlam-tidwLYxGWgw"
+TELEGRAM_CHAT_ID = "1233257009"
 
 
 # ✅ funzione correttamente fuori dalla route
@@ -32,6 +35,19 @@ def salva_immagine_ridotta(file, nome, cognome):
 
     return fs.put(buffer, filename=f"foto_{nome}_{cognome}.jpg")
 
+# FUNZIONE PER BOT TELEGRAM
+def invia_notifica_telegram(messaggio):
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+
+    data = {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": messaggio
+    }
+
+    try:
+        requests.post(url, data=data)
+    except Exception as e:
+        print("Errore Telegram:", e)
 
 @app.route('/')
 def index():
@@ -76,6 +92,19 @@ def invia():
         "stato_whatsapp": None,
         "timestamp": datetime.datetime.now()
     })
+
+    messaggio_telegram = (
+    f"🔥 NUOVA ISCRIZIONE 🔥\n\n"
+    f"👤 {nome} {cognome}\n"
+    f"🚗 {auto}\n"
+    f"🔢 {targa}\n"
+    f"👥 Passeggeri: {passeggeri}\n"
+    f"📱 @{instagram}"
+    )
+
+    invia_notifica_telegram(messaggio_telegram)
+
+
 
     iscrizione_id = str(result.inserted_id)
 

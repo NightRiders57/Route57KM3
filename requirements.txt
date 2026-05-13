@@ -4,3 +4,4 @@ dnspython
 qrcode
 pillow
 openpyxl
+requests
