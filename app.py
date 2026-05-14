@@ -90,6 +90,7 @@ def invia():
         "foto2_id": foto2_id,
         "checkin": False,
         "stato_whatsapp": None,
+        "pagato": False,
         "timestamp": datetime.datetime.now()
     })
 
@@ -140,8 +141,10 @@ def login():
                 for i in iscritti
                 if i.get("whatsapp_accettato")
                 )
+            totale_pagamenti = sum(1 for i in iscritti if i.get("pagato"))
+            incasso_totale = sum(int(i.get("passeggeri", 1)) * 42 for i in iscritti if i.get("pagato"))
 
-            return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri)
+            return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri, totale_pagamenti=totale_pagamenti, incasso_totale=incasso_totale)
         else:
             return "Password errata", 401
     return render_template('login.html')
@@ -294,7 +297,7 @@ def export_iscrizioni():
     ws.title = "Iscrizioni"
 
     # Intestazioni colonne
-    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa", "Intolleranze"])
+    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa", "Intolleranze", "Pagato"])
 
     # Inserimento dati
     for i in iscritti:
@@ -305,7 +308,8 @@ def export_iscrizioni():
             i.get("cellulare", ""),
             i.get("auto", ""),
             i.get("targa", ""),
-            i.get("intolleranze", "")
+            i.get("intolleranze", ""),
+            "Sì" if i.get("pagato") else "No"
         ])
 
     # Salva il file in memoria
@@ -320,6 +324,26 @@ def export_iscrizioni():
         download_name="iscrizioni.xlsx",
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )   
+
+@app.route('/toggle_pagato/<id_iscrizione>', methods=['POST'])
+def toggle_pagato(id_iscrizione):
+    try:
+        obj_id = ObjectId(id_iscrizione)
+
+        iscrizione = iscrizioni_col.find_one({"_id": obj_id})
+
+        nuovo_stato = not iscrizione.get("pagato", False)
+
+        iscrizioni_col.update_one(
+            {"_id": obj_id},
+            {"$set": {"pagato": nuovo_stato}}
+        )
+
+        return "OK", 200
+
+    except Exception as e:
+        print(e)
+        return "Errore", 500
 
 if __name__ == '__main__':
     import os

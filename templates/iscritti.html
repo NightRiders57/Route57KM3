@@ -68,6 +68,7 @@
         <strong>Accettati:</strong> {{ totale_accettati }}<br>
         <strong>Rifiutati:</strong> {{ totale_rifiutati }}<br>
         <strong>Totale Passeggeri:</strong> {{ totale_passeggeri }}
+        <strong>Totale Pagamenti:</strong> {{ incasso_totale }}€
     </div>
     <a href="/export_checkin">
     <button style="margin-top: 10px; background:#f49529; color:white; padding:10px; border:none; border-radius:5px;">
@@ -106,7 +107,7 @@
                 <th>Accetta Pista</th>
                 <th>Rifiuta</th>
                 <th>Invia Staff</th>
-                
+                <th>Pagato</th>
             </tr>
         </thead>
         <tbody>
@@ -169,7 +170,14 @@
 <td>
     <button class="invia_staff">Invia Staff</button>
 </td>
+<td>
+    <input type="checkbox" 
+           class="pagato-checkbox" 
+           {% if iscrizione.pagato %}checked{% endif %}>
+</td>
+            </tr>
             {% endfor %}
+
         </tbody>
     </table>
 
@@ -290,6 +298,20 @@
             btn.disabled = true;
             });
        });
+
+       // PAGATO
+
+       document.querySelectorAll(".pagato-checkbox").forEach(chk => {
+           chk.addEventListener("change", () => {
+
+               const row = chk.closest("tr");
+               const iscrizione_id = row.getAttribute("data-id");
+
+               fetch(`/toggle_pagato/${iscrizione_id}`, {
+                   method: 'POST'
+               });
+            });
+        });
     });
     </script>
     <script>
