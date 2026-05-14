@@ -87,6 +87,27 @@
         🗑 RESET DATABASE
     </button>
 </form>
+<div style="margin:20px 0; display:flex; gap:10px; flex-wrap:wrap;">
+
+    <input type="text" id="searchInput"
+           placeholder="Cerca nome/cognome..."
+           style="padding:8px; border-radius:5px; border:none;">
+
+    <select id="filterSelect"
+            style="padding:8px; border-radius:5px;">
+        <option value="tutti">Tutti</option>
+        <option value="checkin">Check-in</option>
+        <option value="pagati">Pagato</option>
+        <option value="nonpagati">Non Pagato</option>
+        <option value="accettati">Accettati</option>
+        <option value="rifiutati">Rifiutati</option>
+    </select>
+
+    <button id="sortNome">
+        Ordina Nome A-Z
+    </button>
+
+</div>
     <table>
         <thead>
             <tr>
@@ -316,10 +337,80 @@
     });
     </script>
     <script>
+
+const searchInput = document.getElementById("searchInput");
+const filterSelect = document.getElementById("filterSelect");
+const sortBtn = document.getElementById("sortNome");
+
+function filtraTabella() {
+
+    const search = searchInput.value.toLowerCase();
+    const filtro = filterSelect.value;
+
+    document.querySelectorAll("tbody tr").forEach(row => {
+
+        const nome = row.children[1].innerText.toLowerCase();
+        const cognome = row.children[2].innerText.toLowerCase();
+
+        const checkin = row.children[0].innerText.includes("✅");
+
+        const pagato = row.querySelector(".pagato-checkbox")?.checked;
+
+        const accettato = row.querySelector(".accetta")?.disabled;
+
+        const rifiutato = row.querySelector(".rifiuta")?.disabled;
+
+        let visibile = true;
+
+        // ricerca testo
+        if (!nome.includes(search) && !cognome.includes(search)) {
+            visibile = false;
+        }
+
+        // filtri
+        if (filtro === "checkin" && !checkin) visibile = false;
+
+        if (filtro === "pagati" && !pagato) visibile = false;
+
+        if (filtro === "nonpagati" && pagato) visibile = false;
+
+        if (filtro === "accettati" && !accettato) visibile = false;
+
+        if (filtro === "rifiutati" && !rifiutato) visibile = false;
+
+        row.style.display = visibile ? "" : "none";
+    });
+}
+
+// Eventi
+searchInput.addEventListener("input", filtraTabella);
+filterSelect.addEventListener("change", filtraTabella);
+
+// ORDINE A-Z
+sortBtn.addEventListener("click", () => {
+
+    const tbody = document.querySelector("tbody");
+
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+
+    rows.sort((a, b) => {
+
+        const nomeA = a.children[1].innerText.toLowerCase();
+        const nomeB = b.children[1].innerText.toLowerCase();
+
+        return nomeA.localeCompare(nomeB);
+    });
+
+    rows.forEach(r => tbody.appendChild(r));
+});
+
+</script>
+    <script>
         setInterval(() => {
             location.reload();
         }, 60000); // Ricarica la pagina ogni 60 secondi
     </script>
+
 
 </body>
 </html>
