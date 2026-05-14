@@ -81,12 +81,6 @@
         📥 Esporta Iscrizioni
     </button>
     </a>
-    <form action="/reset_db" method="POST" onsubmit="return confirm('⚠ ATTENZIONE! Verrà eliminato TUTTO. Sei sicuro?')">
-    <input type="hidden" name="password_reset" value="Nightriders2026">
-    <button type="submit" style="background:red;color:white;padding:10px;border:none;border-radius:5px;">
-        🗑 RESET DATABASE
-    </button>
-</form>
 <div style="margin:20px 0; display:flex; gap:10px; flex-wrap:wrap;">
 
     <input type="text" id="searchInput"
@@ -101,6 +95,7 @@
         <option value="nonpagati">Non Pagato</option>
         <option value="accettati">Accettati</option>
         <option value="rifiutati">Rifiutati</option>
+        <option value="attesa">In Sospeso</option>
     </select>
 
     <button id="sortNome">
@@ -202,7 +197,13 @@
 
         </tbody>
     </table>
-
+    <br><br>
+<form action="/reset_db" method="POST" onsubmit="return confirm('⚠ ATTENZIONE! Verrà eliminato TUTTO. Sei sicuro?')">
+    <input type="hidden" name="password_reset" value="Nightriders2026">
+    <button type="submit" style="background:red;color:white;padding:5px;border:none;border-radius:5px;">
+        🗑 RESET DATABASE
+    </button>
+</form>
     <!-- Lightbox JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 
@@ -360,6 +361,8 @@ function filtraTabella() {
 
         const rifiutato = row.querySelector(".rifiuta")?.disabled;
 
+        const attesa = !accettato && !rifiutato;
+
         let visibile = true;
 
         // ricerca testo
@@ -377,6 +380,8 @@ function filtraTabella() {
         if (filtro === "accettati" && !accettato) visibile = false;
 
         if (filtro === "rifiutati" && !rifiutato) visibile = false;
+
+        if (filtro === "attesa" && !attesa) visibile = false;
 
         row.style.display = visibile ? "" : "none";
     });
