@@ -126,6 +126,7 @@
                 <th>Rifiuta</th>
                 <th>Invia Staff</th>
                 <th>Pagato</th>
+                <th>Sconti</th>
             </tr>
         </thead>
         <tbody>
@@ -192,6 +193,9 @@
     <input type="checkbox" 
            class="pagato-checkbox" 
            {% if iscrizione.pagato %}checked{% endif %}>
+</td>
+<td>
+    <input type="number" min="0" value="0" class="sconti-input" style="width:60px;">
 </td>
             </tr>
             {% endfor %}
@@ -410,6 +414,35 @@ sortBtn.addEventListener("click", () => {
     rows.forEach(r => tbody.appendChild(r));
 });
 
+</script>
+<script>
+let incasso = 0;
+
+document.querySelectorAll("tbody tr").forEach(row => {
+
+    const pagato = row.querySelector(".pagato-checkbox")?.checked;
+
+    const sconti = parseInt(row.querySelector(".sconti-input")?.value || 0);
+
+    if (pagato) {
+        incasso += 42;
+        incasso -= (sconti * 10);
+    }
+});
+</script>
+<script>
+document.querySelectorAll(".sconti-input").forEach(inp => {
+    inp.addEventListener("change", () => {
+
+        const row = inp.closest("tr");
+        const id = row.getAttribute("data-id");
+        const sconti = inp.value;
+
+        fetch(`/update_sconti/${id}?sconti=${sconti}`, {
+            method: "POST"
+        });
+    });
+});
 </script>
     <script>
         setInterval(() => {

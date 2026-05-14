@@ -142,7 +142,7 @@ def login():
                 if i.get("whatsapp_accettato")
                 )
             totale_pagamenti = sum(1 for i in iscritti if i.get("pagato"))
-            incasso_totale = sum(int(i.get("passeggeri", 1)) * 42 for i in iscritti if i.get("pagato"))
+            incasso_totale = sum((int(i.get("passeggeri", 1)) * 42) - (int(i.get("sconti", 0)) * 10) for i in iscritti if i.get("pagato"))
             totale_attesa = sum(1 for i in iscritti if not i.get("whatsapp_accettato") and not i.get("whatsapp_rifiutato"))
 
             return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri, totale_pagamenti=totale_pagamenti, incasso_totale=incasso_totale, totale_attesa=totale_attesa)
