@@ -347,6 +347,24 @@ def toggle_pagato(id_iscrizione):
         print(e)
         return "Errore", 500
     
+@app.route('/update_sconti/<id_iscrizione>', methods=['POST'])
+def update_sconti(id_iscrizione):
+
+    try:
+        obj_id = ObjectId(id_iscrizione)
+
+        sconti = int(request.args.get("sconti", 0))
+
+        iscrizioni_col.update_one(
+            {"_id": obj_id},
+            {"$set": {"sconti": sconti}}
+        )
+
+        return "OK", 200
+
+    except Exception as e:
+        print("Errore update sconti:", e)
+        return "Errore", 500
 
 if __name__ == '__main__':
     import os
