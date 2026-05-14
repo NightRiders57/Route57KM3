@@ -63,12 +63,13 @@
 <body>
     <h1>Elenco Iscritti</h1>
     <div class="stats-box">
-        <strong>Totale iscritti:</strong> {{ totale }}<br>
-        <strong>Check-in effettuati:</strong> {{ checkin_effettuati }}<br>
-        <strong>Accettati:</strong> {{ totale_accettati }}<br>
+        <strong>Totale Auto Iscritte:</strong> {{ totale }}
+        <strong>Totale Passeggeri:</strong> {{ totale_passeggeri }}<br>
+        <strong>Accettati:</strong> {{ totale_accettati }}
         <strong>Rifiutati:</strong> {{ totale_rifiutati }}<br>
-        <strong>Totale Passeggeri:</strong> {{ totale_passeggeri }}
-        <strong>Totale Pagamenti:</strong> {{ incasso_totale }}€
+        <strong>Totale Pagamenti:</strong> {{ totale_pagamenti }}
+        <strong>Totale Incasso:</strong> {{ incasso_totale }}€<br>
+        <strong>Check-in effettuati:</strong> {{ checkin_effettuati }}<br>
     </div>
     <a href="/export_checkin">
     <button style="margin-top: 10px; background:#f49529; color:white; padding:10px; border:none; border-radius:5px;">
