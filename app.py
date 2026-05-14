@@ -91,6 +91,7 @@ def invia():
         "checkin": False,
         "stato_whatsapp": None,
         "pagato": False,
+        "sconti": 0,
         "timestamp": datetime.datetime.now()
     })
 
