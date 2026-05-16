@@ -204,6 +204,10 @@ def checkin(id_iscrizione):
     iscrizione = iscrizioni_col.find_one({"_id": obj_id})
     if not iscrizione:
         return "Biglietto non trovato", 404
+    
+    # 🚫 pagamento mancante
+    if not iscrizione.get("pagato", False):
+        return render_template("pagamento_mancante.html", iscrizione=iscrizione)
 
     # 🚫 già scansionato
     if iscrizione.get("checkin") is True:
