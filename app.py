@@ -62,7 +62,7 @@ def invia():
     cellulare = request.form['cellulare']
     email = request.form['email']
     auto = request.form['auto']
-    targa = request.form['targa']
+    targa = request.form['targa'].strip().upper()
     intolleranze = request.form.get('intolleranze', '')
     passeggeri = request.form['passeggeri']
     andatura = request.form.get('andatura', '')
@@ -75,6 +75,11 @@ def invia():
     foto1_id = salva_immagine_ridotta(foto1_file, nome, cognome)
     foto2_id = salva_immagine_ridotta(foto2_file, nome, cognome)
 
+    targa_esistente = iscrizioni_col.find_one({"targa": targa.upper()})
+    
+    if targa_esistente:
+        return render_template('errore_gia_iscritto.html', messaggio="La targa inserita è già associata a un'iscrizione. Verrai presto ricontattato.")
+    
     result = iscrizioni_col.insert_one({
         "nome": nome,
         "cognome": cognome,
@@ -94,6 +99,8 @@ def invia():
         "sconti": 0,
         "timestamp": datetime.datetime.now()
     })
+        
+        
 
     messaggio_telegram = (
     f"🔥 NUOVA ISCRIZIONE 🔥\n\n"
@@ -124,6 +131,9 @@ def invia():
 
     messaggio = f"Ciao {nome}, la tua iscrizione all’evento Route57 KM.3 è stata ricevuta! 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
+    
+
+    
 
 # --- Mostra iscritti (con password semplice) ---
 @app.route('/login', methods=['GET', 'POST'])

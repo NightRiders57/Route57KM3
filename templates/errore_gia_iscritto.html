@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Errore iscrizione</title>
+
+    <style>
+        body{
+            background:black;
+            color:white;
+            font-family:Arial;
+            text-align:center;
+            padding-top:100px;
+        }
+
+        .box{
+            background:#1a1a1a;
+            display:inline-block;
+            padding:40px;
+            border-radius:15px;
+            border:2px solid red;
+        }
+
+        h1{
+            color:red;
+        }
+
+        a{
+            color:#f49529;
+            text-decoration:none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+
+    <h1>❌ Iscrizione già presente</h1>
+
+    <p>{{ messaggio }}</p>
+
+    <br>
+
+    <a href="/">⬅ Torna indietro</a>
+
+</div>
+
+</body>
+</html>
