@@ -335,13 +335,45 @@
 
        document.querySelectorAll(".pagato-checkbox").forEach(chk => {
            chk.addEventListener("change", () => {
-
+               
+               //QUANDO E SPUNTATO
+               if (!chk.checked) return;
                const row = chk.closest("tr");
+
                const iscrizione_id = row.getAttribute("data-id");
+
+               const nome = row.children[1].innerText.trim();
+
+               const cellulare = row.children[4]
+                   .innerText
+                   .trim()
+                   .replace(/\s+/g, '');
+
+               const passeggeri = row.children[11].innerText.trim();
+
+               const totale = parseInt(passeggeri) * 42;
+
+               const intolleranze = row.children[10].innerText.trim();
+
+               //SALVA NEL DB
 
                fetch(`/toggle_pagato/${iscrizione_id}`, {
                    method: 'POST'
                });
+               //MESSAGGIO CONFERMA
+               const msg =
+                   `Ciao ${nome}! ✅%0A%0A` +
+
+                   `Abbiamo ricevuto il pagamento per il Route57 KM.3 🔥%0A%0A` +
+
+                   `👥 Passeggeri: ${passeggeri}%0A` +
+                   `💶 Totale ricevuto: €${totale}%0A%0A` +
+
+                   `🤢 Intolleranze:%0A${intolleranze}%0A%0A` +
+
+                   `L'iscrizione è stata confermata! Facci sapere se è tutto corretto e le eventuali intolleranze! Ti aspettiamo il 28 Giugno! 🚗💨`; 
+               
+                   window.open(`https://wa.me/${cellulare}?text=${msg}`, "_blank");
             });
         });
     });
