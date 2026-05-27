@@ -3,5 +3,6 @@ pymongo
 dnspython
 qrcode
 pillow
+pillow-heif
 openpyxl
 requests

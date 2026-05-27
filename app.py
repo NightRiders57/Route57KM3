@@ -6,9 +6,12 @@ import gridfs
 import io
 from io import BytesIO
 from PIL import Image, UnidentifiedImageError
+from pillow_heif import register_heif_opener
 import datetime
 import qrcode
 import requests
+
+register_heif_opener()
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -26,6 +29,7 @@ TELEGRAM_CHAT_ID = "1233257009"
 def salva_immagine_ridotta(file, nome, cognome):
     try:
         img = Image.open(file)
+        img.load()
     except UnidentifiedImageError:
             raise Exception(
             "Formato immagine non supportato. "
@@ -34,6 +38,9 @@ def salva_immagine_ridotta(file, nome, cognome):
 
     max_size = 1280
     img.thumbnail((max_size, max_size))
+
+    if img.mode != "RGB":
+        img = img.convert("RGB")
 
     buffer = io.BytesIO()
     img.save(buffer, format="JPEG", quality=70, optimize=True)
