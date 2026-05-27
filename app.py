@@ -5,7 +5,7 @@ from openpyxl import Workbook
 import gridfs
 import io
 from io import BytesIO
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import datetime
 import qrcode
 import requests
@@ -24,7 +24,13 @@ TELEGRAM_CHAT_ID = "1233257009"
 
 # ✅ funzione correttamente fuori dalla route
 def salva_immagine_ridotta(file, nome, cognome):
-    img = Image.open(file)
+    try:
+        img = Image.open(file)
+    except UnidentifiedImageError:
+            raise Exception(
+            "Formato immagine non supportato. "
+            "Ridimensiona oppure carica uno screen dell'immagine."
+        )
 
     max_size = 1280
     img.thumbnail((max_size, max_size))
@@ -72,8 +78,12 @@ def invia():
     foto1_file = request.files['foto1']
     foto2_file = request.files['foto2']
 
-    foto1_id = salva_immagine_ridotta(foto1_file, nome, cognome)
-    foto2_id = salva_immagine_ridotta(foto2_file, nome, cognome)
+    try:
+        foto1_id = salva_immagine_ridotta(foto1_file, nome, cognome)
+        foto2_id = salva_immagine_ridotta(foto2_file, nome, cognome)
+
+    except Exception as e:
+        return str(e), 400
 
     targa_esistente = iscrizioni_col.find_one({"targa": targa.upper()})
     
