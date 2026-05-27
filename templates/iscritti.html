@@ -82,6 +82,11 @@
         📥 Esporta Iscrizioni
     </button>
     </a>
+    <a>
+    <button id="autoRefreshBtn" style="margin-top: 10px; padding:10px">
+        🏁 Start Evento 
+    </button>    
+    </a>    
 <div style="margin:20px 0; display:flex; gap:10px; flex-wrap:wrap;">
 
     <input type="text" id="searchInput"
@@ -481,9 +486,30 @@ document.querySelectorAll(".sconti-input").forEach(inp => {
 });
 </script>
     <script>
-        setInterval(() => {
+        let autoRefresh = false;
+let refreshInterval = null;
+
+document.getElementById("autoRefreshBtn").addEventListener("click", () => {
+
+    autoRefresh = !autoRefresh;
+
+    const btn = document.getElementById("autoRefreshBtn");
+
+    if(autoRefresh){
+
+        btn.innerText = "🟢 Evento ON";
+
+        refreshInterval = setInterval(() => {
             location.reload();
-        }, 60000); // Ricarica la pagina ogni 60 secondi
+        }, 60000);
+
+    } else {
+
+        btn.innerText = "🔴 Evento OFF";
+
+        clearInterval(refreshInterval);
+    }
+});
     </script>
 
 
