@@ -127,7 +127,7 @@
                 <th>Andatura</th>
                 <th>Nick</th>
                 <th>Accetta</th>
-                <th>Accetta Pista</th>
+                <th>Sollecito</th>
                 <th>Rifiuta</th>
                 <th>Invia Staff</th>
                 <th>Pagato</th>
@@ -180,9 +180,9 @@
     </button>
 </td>
 <td>
-    <button class="accetta_pista {% if iscrizione.whatsapp_accettato_pista %}inviato{% endif %}"
-        {% if iscrizione.whatsapp_accettato_pista %}disabled{% endif %}>
-        ✅ Accetta
+    <button class="sollecito {% if iscrizione.pagato %}inviato{% endif %}"
+        {% if iscrizione.pagato %}disabled{% endif %}>
+        ✅ Sollecito
     </button>
 </td>
 <td>
@@ -258,8 +258,8 @@
             });
         });
 
-        // ACCETTA PISTA
-        document.querySelectorAll(".accetta_pista").forEach(btn => {
+        // SOLLECITO ACCETTA
+        document.querySelectorAll(".sollecito").forEach(btn => {
             btn.addEventListener("click", () => {
                 const row = btn.closest("tr");
                 const nome = row.children[1].innerText.trim();
@@ -270,17 +270,15 @@
 
                 const bigliettoUrl = `https://iscrizioni.nightriders57.it/biglietto/${iscrizione_id}`;
 
-                const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
-                            `Ti aspettiamo il 28 Giugno all’evento *Route57 KM.3*!%0A` +
-                            `Invia un WhatsApp al numero 3515486141 per la prenotazione del turno indicando che sei iscritto tramite NightRiders con il turno scelto.%0A` +
-                            `In allegato troverai la lista ed i costi dei vari turni!%0A` +
-                            `Il giorno dell'evento mostra il biglietto all’ingresso:%0A${bigliettoUrl}%0A%0A` +
+                const msg = `Ciao ${nome}, ti ricordiamo che il *15/06* è il termine ultimo per confermare la partecipazione!%0A%0A` +
+                            `Ti aspettiamo il 28 Giugno al *Route57 KM.3*!%0A` +
+                            `Invia il pagamento per assicurarti il posto.%0A` +
                             `A presto! 🔥`;
 
                 sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
 
                  // 👇 Aggiorna il DB
-                fetch(`/aggiorna_whatsapp/${iscrizione_id}?tipo=accetta`, { method: 'POST' });
+                //fetch(`/aggiorna_whatsapp/${iscrizione_id}?tipo=accetta`, { method: 'POST' });
 
             });
         });
@@ -467,7 +465,7 @@ document.querySelectorAll("tbody tr").forEach(row => {
 
     if (pagato) {
         incasso += 42;
-        incasso -= (sconti * 10);
+        incasso -= (sconti * 7);
     }
 });
 </script>
