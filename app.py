@@ -182,7 +182,12 @@ def login():
                    guadagno = ((passeggeri - sconti)* 10) + (sconti * 7) 
                    guadagno_totale += guadagno
 
-            return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri, totale_pagamenti=totale_pagamenti, incasso_totale=incasso_totale, totale_attesa=totale_attesa, guadagno_totale=guadagno_totale)
+            totale_ristorante = 0
+            for iscrizione in iscritti:
+                if iscrizione.get("pagato", False):
+                    totale_ristorante += int(iscrizione.get("passeggeri",0)) * 35
+
+            return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri, totale_pagamenti=totale_pagamenti, incasso_totale=incasso_totale, totale_attesa=totale_attesa, guadagno_totale=guadagno_totale, totale_ristorante=totale_ristorante)
         else:
             return "Password errata", 401
     return render_template('login.html')
