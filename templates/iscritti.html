@@ -104,6 +104,9 @@
         <option value="accettati">Accettati</option>
         <option value="rifiutati">Rifiutati</option>
         <option value="attesa">In Sospeso</option>
+            <option value="veloce">Andatura Veloce</option>
+            <option value="medio">Andatura Passeggiata</option>
+            <option value="lento">Andatura Andante</option>
     </select>
 
     <button id="sortNome">
@@ -428,6 +431,12 @@ function filtraTabella() {
         if (filtro === "rifiutati" && !rifiutato) visibile = false;
 
         if (filtro === "attesa" && !attesa) visibile = false;
+
+        if (filtro === "veloce" && row.children[12].innerText.trim() !== "Veloce") visibile = false;
+
+        if (filtro === "lento" && row.children[12].innerText.trim() !== "Andante") visibile = false;
+
+        if (filtro === "medio" && row.children[12].innerText.trim() !== "Passeggiata") visibile = false;
 
         row.style.display = visibile ? "" : "none";
     });
