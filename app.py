@@ -114,7 +114,6 @@ def invia():
         "stato_whatsapp": None,
         "pagato": False,
         "sconti": 0,
-        "importo_pagato": 0.0,
         "timestamp": datetime.datetime.now()
     })
         
@@ -171,14 +170,17 @@ def login():
                 if i.get("whatsapp_accettato")
                 )
             totale_pagamenti = sum(1 for i in iscritti if i.get("pagato"))
-            incasso_totale = sum(
-                float(i.get("importo_pagato", 0))
-                for i in iscritti
-                if i.get("pagato")
-            )
+            incasso_totale = sum((int(i.get("passeggeri", 1)) * 42) - (int(i.get("sconti", 0)) * 7) for i in iscritti if i.get("pagato"))
             totale_attesa = sum(1 for i in iscritti if not i.get("whatsapp_accettato") and not i.get("whatsapp_rifiutato"))
             
-            guadagno_totale = incasso_totale - totale_ristorante
+            guadagno_totale = 0 
+            for iscrizione in iscritti:
+                if iscrizione.get("pagato"):
+                   passeggeri = int(iscrizione.get("passeggeri", 0))
+                   sconti = int(iscrizione.get("sconti", 0))
+
+                   guadagno = ((passeggeri - sconti)* 10) + (sconti * 7) 
+                   guadagno_totale += guadagno
 
             totale_ristorante = 0
             for iscrizione in iscritti:
