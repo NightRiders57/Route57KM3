@@ -137,6 +137,7 @@
                 <th>Invia Staff</th>
                 <th>Pagato</th>
                 <th>Sconti</th>
+                <th>Pagato €</th>
             </tr>
         </thead>
         <tbody>
@@ -206,6 +207,14 @@
 </td>
 <td>
     <input type="number" min="0" class="sconti-input" style="width:60px;" value="{{ iscrizione.sconti }}">
+</td>
+<td>
+    <input type="number"
+           min="0"
+           step="0.01"
+           class="importo-input"
+           style="width:80px;"
+           value="{{ iscrizione.importo_pagato }}">
 </td>
             </tr>
             {% endfor %}
