@@ -178,14 +178,7 @@ def login():
             )
             totale_attesa = sum(1 for i in iscritti if not i.get("whatsapp_accettato") and not i.get("whatsapp_rifiutato"))
             
-            guadagno_totale = 0 
-            for iscrizione in iscritti:
-                if iscrizione.get("pagato"):
-                   passeggeri = int(iscrizione.get("passeggeri", 0))
-                   sconti = int(iscrizione.get("sconti", 0))
-
-                   guadagno = ((passeggeri - sconti)* 10) + (sconti * 7) 
-                   guadagno_totale += guadagno
+            guadagno_totale = incasso_totale - totale_ristorante
 
             totale_ristorante = 0
             for iscrizione in iscritti:
