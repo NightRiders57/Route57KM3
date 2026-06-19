@@ -352,19 +352,19 @@ def export_iscrizioni():
     ws.title = "Iscrizioni"
 
     # Intestazioni colonne
-    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa", "Intolleranze", "Passeggeri"])
+    ws.append(["Nome", "Cognome", "Cellulare", "Auto", "Targa", "Intolleranze", "Passeggeri", "Andatura"])
 
     # Inserimento dati
     for i in iscritti:
         ws.append([
             i.get("nome", ""),
             i.get("cognome", ""),
-            i.get("email", ""),
             i.get("cellulare", ""),
             i.get("auto", ""),
             i.get("targa", ""),
             i.get("intolleranze", ""),
-            i.get("passeggeri", "")
+            i.get("passeggeri", ""),
+            i.get("andatura", "")
         ])
 
     # Salva il file in memoria
