@@ -168,7 +168,7 @@ def login():
             totale_passeggeri = sum(
                 int(i.get("passeggeri",1)) 
                 for i in iscritti
-                if i.get("whatsapp_accettato")
+                if i.get("pagato")
                 )
             totale_pagamenti = sum(1 for i in iscritti if i.get("pagato"))
             
