@@ -344,7 +344,7 @@ def export_checkin():
 def export_iscrizioni():
     
     iscritti = list(iscrizioni_col.find({
-        "whatsapp_accettato": True
+        "pagato": True
     }))
     # Crea un file Excel in memoria
     wb = Workbook()
@@ -352,7 +352,7 @@ def export_iscrizioni():
     ws.title = "Iscrizioni"
 
     # Intestazioni colonne
-    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa", "Intolleranze", "Pagato"])
+    ws.append(["Nome", "Cognome", "Email", "Cellulare", "Auto", "Targa", "Intolleranze", "Passeggeri"])
 
     # Inserimento dati
     for i in iscritti:
@@ -364,7 +364,7 @@ def export_iscrizioni():
             i.get("auto", ""),
             i.get("targa", ""),
             i.get("intolleranze", ""),
-            "Sì" if i.get("pagato") else "No"
+            i.get("passeggeri", "")
         ])
 
     # Salva il file in memoria
