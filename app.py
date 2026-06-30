@@ -62,9 +62,13 @@ def invia_notifica_telegram(messaggio):
     except Exception as e:
         print("Errore Telegram:", e)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+@app.route('/pitlane57')
+def pitlane57():
+    return render_template('pitlane57.html')
+
+@app.route('/smp')
+def smp():
+    return render_template('smp.html')
 
 
 # --- Routes ---
