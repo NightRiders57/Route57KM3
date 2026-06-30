@@ -256,12 +256,8 @@
                 const bigliettoUrl = `https://iscrizioni.nightriders57.it/biglietto/${iscrizione_id}`;
 
                 const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
-                            `Ti aspettiamo il 28 Giugno all’evento *Route57 KM.3*!%0A%0A` +
-                            `Per il pagamento della quota di ingresso effettua un bonifico di 42€ a persona alle seguenti coordinate:%0A` +
-                            `IBAN: IT57K03268223000EMH01009426%0A` +
-                            `Intestato a: Fittaiolo Francesco%0A` +
-                            `Causale: Nome Cognome - Quota Route KM.3%0A%0A` +
-                            `La quota deve essere versata entro e non oltre il 15/06. L’iscrizione sarà valida solo a pagamento eseguito.%0A%0A` +
+                            `Ti aspettiamo l'8 Novembre all’evento *PitLane57*!%0A%0A` +
+                            `Ti contatteremo per la scelta dei turni!%0A` +
                             `Mostra il biglietto che trovi a questo link all'arrivo:%0A${bigliettoUrl}%0A%0A` +
                             `A presto! 🔥`;
 
@@ -285,9 +281,9 @@
 
                 const bigliettoUrl = `https://iscrizioni.nightriders57.it/biglietto/${iscrizione_id}`;
 
-                const msg = `Ciao ${nome}, ti ricordiamo che il *15/06* è il termine ultimo per confermare la partecipazione!%0A%0A` +
-                            `Ti aspettiamo il 28 Giugno al *Route57 KM.3*!%0A` +
-                            `Invia il pagamento per assicurarti il posto.%0A` +
+                const msg = `Ciao ${nome}, ti ricordiamo che il 25/10* è il termine ultimo per confermare la partecipazione acquistando un turno!%0A%0A` +
+                            `Ti aspettiamo l'8 Novembre all’evento *PitLane57*!%0A` +
+                            `Scegli il tuo turno per assicurarti il posto.%0A` +
                             `A presto! 🔥`;
 
                 sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
@@ -382,14 +378,14 @@
                const msg =
                    `Ciao ${nome}! ✅%0A%0A` +
 
-                   `Abbiamo ricevuto il pagamento per il Route57 KM.3 🔥%0A%0A` +
+                   `Abbiamo ricevuto il pagamento per la PitLane57 🔥%0A%0A` +
 
-                   `👥 Passeggeri: ${passeggeri}%0A` +
+                   //`👥 Passeggeri: ${passeggeri}%0A` +
                    `💶 Totale ricevuto: €${totale}%0A%0A` +
 
-                   `🤢 Intolleranze:%0A${intolleranze}%0A%0A` +
+                   //`🤢 Intolleranze:%0A${intolleranze}%0A%0A` +
 
-                   `L'iscrizione è stata confermata! Facci sapere se è tutto corretto e le eventuali intolleranze! Ti aspettiamo il 28 Giugno! 🚗💨`; 
+                   `L'iscrizione è stata confermata!  Ti aspettiamo l'8 Novembre! 🚗💨`; 
                
                    window.open(`https://wa.me/${cellulare}?text=${msg}`, "_blank");
             });
