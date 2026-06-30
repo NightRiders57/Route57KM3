@@ -245,7 +245,7 @@ def biglietto(id_iscrizione):
 
     if evento == "pitlane57":
          titolo = "PIT LANE 57"
-         sfondo = "locandina.jpg"
+         sfondo = "locandina1.jpg"
 
     elif evento == "smp":
           titolo = "SMP"
@@ -253,7 +253,7 @@ def biglietto(id_iscrizione):
 
     else:
         titolo = "Night Riders"
-        sfondo = "locandina.jpg"
+        sfondo = "locandina1.jpg"
 
     return render_template(
         "biglietto.html",
@@ -298,7 +298,7 @@ def checkin(id_iscrizione):
 
     if evento == "pitlane57":
          titolo = "PIT LANE 57"
-         sfondo = "locandina.jpg"
+         sfondo = "locandina1.jpg"
 
     elif evento == "smp":
           titolo = "SMP"
@@ -306,7 +306,7 @@ def checkin(id_iscrizione):
 
     else:
         titolo = "Night Riders"
-        sfondo = "locandina.jpg"
+        sfondo = "locandina1.jpg"
     
     # 🚫 pagamento mancante
     if not iscrizione.get("pagato", False):
