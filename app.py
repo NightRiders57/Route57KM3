@@ -93,6 +93,8 @@ def invia():
     foto1_file = request.files['foto1']
     foto2_file = request.files['foto2']
 
+    evento = request.form["evento"]
+
     try:
         foto1_id = salva_immagine_ridotta(foto1_file, nome, cognome)
         foto2_id = salva_immagine_ridotta(foto2_file, nome, cognome)
@@ -123,6 +125,7 @@ def invia():
         "pagato": False,
         "sconti": 0,
         "importo_pagato": 0.0,
+        "evento": evento,
         "timestamp": datetime.datetime.now()
     })
         
