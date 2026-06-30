@@ -102,7 +102,7 @@ def invia():
     except Exception as e:
         return str(e), 400
 
-    targa_esistente = iscrizioni_col.find_one({"targa": targa.upper()})
+    targa_esistente = iscrizioni_col.find_one({"targa": targa.upper(), "evento": evento})
     
     if targa_esistente:
         return render_template('errore_gia_iscritto.html', messaggio="La targa inserita è già associata a un'iscrizione. Verrai presto ricontattato.")
@@ -240,6 +240,30 @@ def biglietto(id_iscrizione):
 
     if not iscrizione:
         return "Biglietto non trovato", 404
+    
+    evento = iscrizione.get("evento") 
+
+    if evento == "pitlane57":
+         titolo = "PIT LANE 57"
+         sfondo = "locandina.jpg"
+
+    elif evento == "smp":
+          titolo = "SMP"
+          sfondo = "locandina2.jpg"
+
+    else:
+        titolo = "Night Riders"
+        sfondo = "locandina.jpg"
+
+    return render_template(
+        "biglietto.html",
+        iscrizione=iscrizione,
+        titolo=titolo,
+        sfondo=sfondo
+    )
+
+    #if not iscrizione:
+     #   return "Biglietto non trovato", 404
 
     #  SE È GIÀ SCANSIONATO → MOSTRA LA PAGINA DEDICATA
     #if iscrizione.get("checkin") == True:
@@ -256,7 +280,7 @@ def biglietto(id_iscrizione):
     #    return "Errore interno", 500
 
     #  Mostro il biglietto
-    return render_template('biglietto.html', iscrizione=iscrizione)
+    #return render_template('biglietto.html', iscrizione=iscrizione, evento=evento)
 
 @app.route('/checkin/<id_iscrizione>')
 def checkin(id_iscrizione):
@@ -268,6 +292,21 @@ def checkin(id_iscrizione):
     iscrizione = iscrizioni_col.find_one({"_id": obj_id})
     if not iscrizione:
         return "Biglietto non trovato", 404
+    
+    #Evento e sfondo
+    evento = iscrizione.get("evento") 
+
+    if evento == "pitlane57":
+         titolo = "PIT LANE 57"
+         sfondo = "locandina.jpg"
+
+    elif evento == "smp":
+          titolo = "SMP"
+          sfondo = "locandina2.jpg"
+
+    else:
+        titolo = "Night Riders"
+        sfondo = "locandina.jpg"
     
     # 🚫 pagamento mancante
     if not iscrizione.get("pagato", False):
@@ -283,7 +322,7 @@ def checkin(id_iscrizione):
         {"$set": {"checkin": True, "checkin_time": datetime.datetime.now()}}
     )
 
-    return render_template("checkin_ok.html", iscrizione=iscrizione)
+    return render_template("checkin_ok.html", iscrizione=iscrizione, titolo=titolo, sfondo=sfondo)
 
 
 @app.route('/aggiorna_whatsapp/<id_iscrizione>', methods=['POST'])

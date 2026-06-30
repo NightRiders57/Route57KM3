@@ -9,7 +9,7 @@
             color: #fff;
             text-align: center;
             padding: 50px;
-            background: url('/static/locandina1.jpg') no-repeat center center fixed;
+            background: url('/static/{{ sfondo }}') no-repeat center center fixed;
             background-size: cover; /* 👉 fa riempire tutta la pagina */
         }
 
@@ -36,7 +36,7 @@
 <body>
 
     <div class="box">
-        <h1>Biglietto PITLANE57</h1>
+        <h1>Biglietto {{ titolo }}</h1>
 
         <p><strong>Nome:</strong> {{ iscrizione.nome }}</p>
         <p><strong>Cognome:</strong> {{ iscrizione.cognome }}</p>
