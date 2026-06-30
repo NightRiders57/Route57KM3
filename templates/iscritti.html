@@ -61,7 +61,13 @@
     </style>
 </head>
 <body>
-    <h1>Elenco Iscritti</h1>
+    <h1>
+    {% if evento %} 
+        Elenco Iscritti - {{ evento|upper }}
+    {% else %}
+        Elenco Iscritti
+    {% endif %}
+    </h1>
     <div class="stats-box">
         <strong>Totale Auto Iscritte:</strong> {{ totale }}
         <strong>Totale Passeggeri:</strong> {{ totale_passeggeri }}<br>

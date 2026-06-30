@@ -166,26 +166,31 @@ def invia():
 
 # --- Mostra iscritti (con password semplice) ---
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/login/<evento>', methods=['GET', 'POST'])
+def login(evento=None):
     if request.method == 'POST':
         password = request.form['password']
-        if password == "Nightriders2026":
+        if password != "Nightriders2026":
+            return "Password errata"
+        if evento:    
+            iscritti = list(iscrizioni_col.find({"evento": evento}))
+        else:
             iscritti = list(iscrizioni_col.find())
 
-            totale = len(iscritti)
-            checkin_effettuati = sum(1 for i in iscritti if i.get("checkin"))
-            totale_accettati = sum(1 for i in iscritti if i.get("whatsapp_accettato"))
-            totale_rifiutati = sum(1 for i in iscritti if i.get("whatsapp_rifiutato"))
-            totale_passeggeri = sum(
+        totale = len(iscritti)
+        checkin_effettuati = sum(1 for i in iscritti if i.get("checkin"))
+        totale_accettati = sum(1 for i in iscritti if i.get("whatsapp_accettato"))
+        totale_rifiutati = sum(1 for i in iscritti if i.get("whatsapp_rifiutato"))
+        totale_passeggeri = sum(
                 int(i.get("passeggeri",1)) 
                 for i in iscritti
                 if i.get("pagato")
                 )
-            totale_pagamenti = sum(1 for i in iscritti if i.get("pagato"))
+        totale_pagamenti = sum(1 for i in iscritti if i.get("pagato"))
             
-            incasso_totale = 0
+        incasso_totale = 0
 
-            for i in iscritti:
+        for i in iscritti:
                 if not i.get("pagato"):
                     continue
 
@@ -197,18 +202,17 @@ def login():
 
                 incasso_totale += float(importo)
             
-            totale_attesa = sum(1 for i in iscritti if not i.get("whatsapp_accettato") and not i.get("whatsapp_rifiutato"))
+        totale_attesa = sum(1 for i in iscritti if not i.get("whatsapp_accettato") and not i.get("whatsapp_rifiutato"))
 
-            totale_ristorante = 0
-            for iscrizione in iscritti:
+        totale_ristorante = 0
+        for iscrizione in iscritti:
                 if iscrizione.get("pagato", False):
                     totale_ristorante += int(iscrizione.get("passeggeri",0)) * 35
 
-            guadagno_totale = incasso_totale - totale_ristorante
+        guadagno_totale = incasso_totale - totale_ristorante
 
-            return render_template('iscritti.html',iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri, totale_pagamenti=totale_pagamenti, incasso_totale=incasso_totale, totale_attesa=totale_attesa, guadagno_totale=guadagno_totale, totale_ristorante=totale_ristorante)
-        else:
-            return "Password errata", 401
+        return render_template('iscritti.html', evento=evento, iscritti=iscritti, totale=totale, checkin_effettuati=checkin_effettuati, totale_accettati=totale_accettati, totale_rifiutati=totale_rifiutati, totale_passeggeri=totale_passeggeri, totale_pagamenti=totale_pagamenti, incasso_totale=incasso_totale, totale_attesa=totale_attesa, guadagno_totale=guadagno_totale, totale_ristorante=totale_ristorante)
+        
     return render_template('login.html')
 
 
