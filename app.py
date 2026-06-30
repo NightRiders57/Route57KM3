@@ -85,7 +85,7 @@ def invia():
     auto = request.form['auto']
     targa = request.form['targa'].strip().upper()
     intolleranze = request.form.get('intolleranze', '')
-    passeggeri = request.form['passeggeri']
+    passeggeri = request.form.get('passeggeri', 1)
     andatura = request.form.get('andatura', '')
     instagram = request.form['instagram']
 
