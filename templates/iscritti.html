@@ -257,8 +257,16 @@
 
                 const msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
                             `Ti aspettiamo l'8 Novembre all’evento *PitLane57*!%0A%0A` +
-                            `Di seguito le info per la scelta dei turni!%0A` +
+                            `In Allegato le info per la scelta dei turni!%0A` +
+                            `Abbiamo una promo sugli ultimi due turni, sono da mezz’ora anziché 25 min, scontati a 110 anziché 120 🤙🏻 prendendo anche il nostro delle 11:50 105, per un totale di 165!%0A` +
+                            `Per il pagamento: IBAN:IT57K03268223000EMH01009426%0A` +
+                            `Intestato a : %0A` +
+                            `Fittaiolo Francesco%0A` +
+                            `Causale: %0A` +
+                            `Acquisto turni Cremona%0A` +
+
                             `Mostra il biglietto che trovi a questo link all'arrivo:%0A${bigliettoUrl}%0A%0A` +
+
                             `A presto! 🔥`;
 
                 sendWhatsApp(cellulare, msg, btn, "✅ Inviato");
@@ -329,8 +337,11 @@
 
                 const cellulareStaff = "3513048891"; 
 
+                const evento = "{{ evento|upper if evento else 'ISCRIZIONE' }}";
+
                const msg =
                    `NUOVA ISCRIZIONE:%0A%0A` +
+                   `Evento: ${evento}%0A%0A` +
                    `Nome: ${nome} ${cognome}%0A` +
                    `Auto: ${auto}%0A` +
                    `Targa: ${targa}%0A` +
