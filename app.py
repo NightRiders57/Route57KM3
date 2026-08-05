@@ -247,9 +247,9 @@ def biglietto(id_iscrizione):
          titolo = "PIT LANE 57"
          sfondo = "locandina1.jpg"
 
-    elif evento == "smp":
-          titolo = "SMP"
-          sfondo = "locandina2.jpg"
+    elif evento == "aperistatico":
+          titolo = "Aperistatico"
+          sfondo = "locandina2_2.jpg"
 
     else:
         titolo = "Night Riders"
