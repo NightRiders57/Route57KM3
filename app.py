@@ -70,9 +70,9 @@ def index():
 def pitlane57():
     return render_template('pitlane57.html')
 
-@app.route('/smp')
-def smp():
-    return render_template('smp.html')
+@app.route('/aperistatico')
+def aperistatico():
+    return render_template('aperistatico.html')
 
 
 # --- Routes ---
@@ -300,8 +300,8 @@ def checkin(id_iscrizione):
          titolo = "PIT LANE 57"
          sfondo = "locandina1.jpg"
 
-    elif evento == "smp":
-          titolo = "SMP"
+    elif evento == "aperistatico":
+          titolo = "Aperistatico"
           sfondo = "locandina2.jpg"
 
     else:
