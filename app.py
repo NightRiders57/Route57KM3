@@ -80,7 +80,13 @@ def aperistatico():
 def invia():
     nome = request.form['nome']
     cognome = request.form['cognome']
-    cellulare = request.form['cellulare']
+    cellulare = request.form['cellulare'].strip().replace(" ", "")
+    
+    if cellulare.startswith("+39"):
+        cellulare = cellulare[3:]
+        
+    cellulare = "39" + cellulare
+    
     email = request.form['email']
     auto = request.form['auto']
     targa = request.form['targa'].strip().upper()
