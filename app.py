@@ -139,6 +139,7 @@ def invia():
 
     messaggio_telegram = (
     f"🔥 NUOVA ISCRIZIONE 🔥\n\n"
+    f"📅 Evento: {evento}\n"
     f"👤 {nome} {cognome}\n"
     f"🚗 {auto}\n"
     f"🔢 {targa}\n"
