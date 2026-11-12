@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Biglietto {{ iscrizione.nome }}</title>
+    
     <style>
         body {
             font-family: Arial;
@@ -36,7 +37,7 @@
 <body>
 
     <div class="box">
-        <h1>Biglietto {{ titolo }}</h1>
+        <h1>Biglietto {{ titolo }} N.{{ iscrizione.numero_personale }}</h1>
 
         <p><strong>Nome:</strong> {{ iscrizione.nome }}</p>
         <p><strong>Cognome:</strong> {{ iscrizione.cognome }}</p>

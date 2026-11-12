@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, send_file
-from pymongo import MongoClient
+from pymongo import MongoClient, ReturnDocument
 from bson.objectid import ObjectId
 from openpyxl import Workbook
 import gridfs
@@ -21,6 +21,7 @@ client = MongoClient(MONGO_URI)
 db = client.nightriders
 fs = gridfs.GridFS(db)
 iscrizioni_col = db.iscrizioni
+contatori_col = db["contatori"]
 TELEGRAM_TOKEN = "8910850640:AAFZb5KlkUYfmoDo6alZlam-tidwLYxGWgw"
 TELEGRAM_CHAT_ID = "1233257009"
 
@@ -112,6 +113,21 @@ def invia():
     
     if targa_esistente:
         return render_template('errore_gia_iscritto.html', messaggio="La targa inserita è già associata a un'iscrizione. Verrai presto ricontattato.")
+
+    #Generazione numero personale
+    contatore = contatori_col.find_one_and_update(
+        {"_id": "numero_iscrizioni"},
+        {"$setOnInsert": {"valore": 299}},
+        upsert=True
+    )
+    contatore = contatori_col.find_one_and_update(
+        {"_id": "numero_iscrizioni"},
+        {"$inc": {"valore": 1}},
+
+        return_document=ReturnDocument.AFTER
+    )
+
+    numero_personale = contatore["valore"]
     
     result = iscrizioni_col.insert_one({
         "nome": nome,
@@ -129,10 +145,10 @@ def invia():
         "checkin": False,
         "stato_whatsapp": None,
         "pagato": False,
-        "sconti": 0,
         "importo_pagato": 0.0,
         "evento": evento,
-        "timestamp": datetime.datetime.now()
+        "timestamp": datetime.datetime.now(),
+        "numero_personale": numero_personale
     })
         
         
@@ -165,7 +181,7 @@ def invia():
         {"$set": {"qr_id": qr_id}}
     )
 
-    messaggio = f"Ciao {nome}, la tua iscrizione all’evento Route57 KM.3 è stata ricevuta! 🤘"
+    messaggio = f"Ciao {nome}, la tua iscrizione all’evento Nightriders57 è stata ricevuta! 🤘"
     return render_template('conferma.html', nome=nome, messaggio=messaggio)
     
 
@@ -201,12 +217,7 @@ def login(evento=None):
                 if not i.get("pagato"):
                     continue
 
-                importo = i.get("importo_pagato")
-
-                if importo in [None, "", 0]:
-                    passeggeri = int(i.get("passeggeri", 1))
-                    importo = passeggeri * 42
-
+                importo = i.get("importo_pagato") or 0
                 incasso_totale += float(importo)
             
         totale_attesa = sum(1 for i in iscritti if not i.get("whatsapp_accettato") and not i.get("whatsapp_rifiutato"))
@@ -358,6 +369,7 @@ def reset_db():
         iscrizioni_col.drop()
         db.fs.files.drop()
         db.fs.chunks.drop()
+        contatori_col.drop()
         return "✅ Database completamente resettato!"
     except Exception as e:
         print("ERRORE RESET:", e)
@@ -446,39 +458,64 @@ def toggle_pagato(id_iscrizione):
     try:
         obj_id = ObjectId(id_iscrizione)
 
-        iscrizione = iscrizioni_col.find_one({"_id": obj_id})
+        data = request.get_json(silent=True) or {}
 
-        nuovo_stato = not iscrizione.get("pagato", False)
+        nuovo_stato = data.get("pagato")
+        importo = data.get("importo_pagato")
 
-        iscrizioni_col.update_one(
+        if not isinstance(nuovo_stato, bool):
+            return "Stato non valido", 400
+
+        importo = float(importo)
+
+        if importo < 0:
+            return "Importo non valido", 400
+
+        result = iscrizioni_col.update_one(
             {"_id": obj_id},
-            {"$set": {"pagato": nuovo_stato}}
+            {
+                "$set": {
+                    "pagato": nuovo_stato,
+                    "importo_pagato": importo
+                }
+            }
         )
+
+        if result.matched_count == 0:
+            return "Iscrizione non trovata", 404
 
         return "OK", 200
 
     except Exception as e:
-        print(e)
+        print("Errore aggiornamento pagamento:", e)
         return "Errore", 500
-    
-@app.route('/update_sconti/<id_iscrizione>', methods=['POST'])
-def update_sconti(id_iscrizione):
 
+@app.route('/aggiorna_importo/<id_iscrizione>', methods=['POST'])
+def aggiorna_importo(id_iscrizione):
     try:
         obj_id = ObjectId(id_iscrizione)
 
-        sconti = int(request.args.get("sconti", 0))
+        data = request.get_json(silent=True) or {}
+        importo = float(data.get("importo_pagato"))
 
-        iscrizioni_col.update_one(
+        if importo < 0:
+            return "Importo non valido", 400
+
+        result = iscrizioni_col.update_one(
             {"_id": obj_id},
-            {"$set": {"sconti": sconti}}
+            {"$set": {"importo_pagato": importo}}
         )
+
+        if result.matched_count == 0:
+            return "Iscrizione non trovata", 404
 
         return "OK", 200
 
     except Exception as e:
-        print("Errore update sconti:", e)
+        print("Errore salvataggio importo:", e)
         return "Errore", 500
+    
+
 
 if __name__ == '__main__':
     import os

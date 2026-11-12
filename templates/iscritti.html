@@ -142,8 +142,9 @@
                 <th>Rifiuta</th>
                 <th>Invia Staff</th>
                 <th>Pagato</th>
-                <th>Sconti</th>
+                <th>Biglietto</th>
                 <th>Pagato €</th>
+                <th>N. Personale</th>
             </tr>
         </thead>
         <tbody>
@@ -212,11 +213,19 @@
            {% if iscrizione.pagato %}checked{% endif %}>
 </td>
 <td>
-    <input type="number" min="0" class="sconti-input" style="width:60px;" value="{{ iscrizione.sconti }}">
+    <a href="/biglietto/{{ iscrizione._id }}" target="_blank">
+        Visualizza
+    </a>
 </td>
 <td>
-    <input type="number" min="0" class="pagato-input" style="width:60px;" value="{{ iscrizione.importo_pagato }}">
+    <input type="number"
+           min="0"
+           step="0.01"
+           class="pagato-input"
+           style="width:80px;"
+           value="{{ iscrizione.importo_pagato or 0 }}">
 </td>
+<td>{{ iscrizione.numero_personale }}</td>
             </tr>
             {% endfor %}
 
@@ -260,16 +269,16 @@
 
                 if (evento === "pitlane57") {
                     msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
-                          `Ti aspettiamo l'8 Novembre all’evento *PitLane57*!%0A%0A` +
+                          `Ti aspettiamo il 6 Marzo all’evento *PitLane57 Vol.3*!%0A%0A` +
                           `In Allegato le info per la scelta dei turni!%0A` +
-                          `Abbiamo una promo sugli ultimi due turni, sono da mezz’ora anziché 25 min, scontati a 110 anziché 120 🤙🏻 prendendo anche il nostro delle 11:50 105, per un totale di 165!%0A` +
+                          `Promo NightRiders 🤙🏻 Acquistando il nostro turno riservato avrai uno sconto di 10€ su un secondo acquisto (OPL o turno)!%0A` +
                           `Per il pagamento: IBAN:IT57K03268223000EMH01009426%0A` +
                           `Intestato a : %0A` +
                           `Fittaiolo Francesco%0A` +
                           `Causale: %0A` +
                           `Acquisto turni Cremona%0A` +
 
-                          `Mostra il biglietto che trovi a questo link all'arrivo:%0A${bigliettoUrl}%0A%0A` +
+                          `A pagamento eseguito verrà convalidata la tua iscrizione!%0A` +
 
                           `A presto! 🔥`;
 
@@ -301,8 +310,8 @@
 
                 const bigliettoUrl = `https://iscrizioni.nightriders57.it/biglietto/${iscrizione_id}`;
 
-                const msg = `Ciao ${nome}, ti ricordiamo che il 25/10* è il termine ultimo per confermare la partecipazione acquistando un turno!%0A%0A` +
-                            `Ti aspettiamo l'8 Novembre all’evento *PitLane57*!%0A` +
+                const msg = `Ciao ${nome}, ti ricordiamo che il 20/03* è il termine ultimo per confermare la partecipazione acquistando un turno!%0A%0A` +
+                            `Ti aspettiamo il 6 Marzo all’evento *PitLane57 Vol.3*!%0A` +
                             `Scegli il tuo turno per assicurarti il posto.%0A` +
                             `A presto! 🔥`;
 
@@ -368,52 +377,116 @@
             });
        });
 
-       // PAGATO
+    
 
-       document.querySelectorAll(".pagato-checkbox").forEach(chk => {
-           chk.addEventListener("change", () => {
-               
-               //QUANDO E SPUNTATO
-               if (!chk.checked) return;
-               const row = chk.closest("tr");
+    // PAGATO E IMPORTO
 
-               const iscrizione_id = row.getAttribute("data-id");
+document.querySelectorAll(".pagato-input").forEach(input => {
 
-               const nome = row.children[1].innerText.trim();
+    input.addEventListener("change", async () => {
 
-               const cellulare = row.children[4]
-                   .innerText
-                   .trim()
-                   .replace(/\s+/g, '');
+        const row = input.closest("tr");
+        const iscrizione_id = row.dataset.id;
 
-               const passeggeri = row.children[11].innerText.trim();
+        const importo = parseFloat(input.value);
 
-               const totale = parseInt(passeggeri) * 42;
+        if (isNaN(importo) || importo < 0) {
+            alert("Inserisci un importo valido.");
+            return;
+        }
 
-               const intolleranze = row.children[10].innerText.trim();
-
-               //SALVA NEL DB
-
-               fetch(`/toggle_pagato/${iscrizione_id}`, {
-                   method: 'POST'
-               });
-               //MESSAGGIO CONFERMA
-               const msg =
-                   `Ciao ${nome}! ✅%0A%0A` +
-
-                   `Abbiamo ricevuto il pagamento per la PitLane57 🔥%0A%0A` +
-
-                   //`👥 Passeggeri: ${passeggeri}%0A` +
-                   `💶 Totale ricevuto: €${totale}%0A%0A` +
-
-                   //`🤢 Intolleranze:%0A${intolleranze}%0A%0A` +
-
-                   `L'iscrizione è stata confermata!  Ti aspettiamo l'8 Novembre! 🚗💨`; 
-               
-                   window.open(`https://wa.me/${cellulare}?text=${msg}`, "_blank");
+        try {
+            const response = await fetch(`/aggiorna_importo/${iscrizione_id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    importo_pagato: importo
+                })
             });
-        });
+
+            if (!response.ok) {
+                throw new Error("Errore salvataggio importo");
+            }
+
+        } catch (error) {
+            alert("Errore nel salvataggio dell'importo.");
+        }
+
     });
+
+});
+
+
+document.querySelectorAll(".pagato-checkbox").forEach(chk => {
+
+    chk.addEventListener("change", () => {
+
+        const row = chk.closest("tr");
+
+        const iscrizione_id = row.dataset.id;
+        const nuovoStato = chk.checked;
+
+        const nome = row.children[1].innerText.trim();
+
+        const cellulare = row.children[4]
+            .innerText.trim().replace(/\s+/g, '');
+
+        const importo = parseFloat(
+            row.querySelector(".pagato-input").value
+        );
+
+        if (nuovoStato && (isNaN(importo) || importo < 0)) {
+            alert("Inserisci prima un importo valido.");
+            chk.checked = false;
+            return;
+        }
+
+        // Aggiornamento database
+        const richiesta = fetch(`/toggle_pagato/${iscrizione_id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                pagato: nuovoStato,
+                importo_pagato: importo
+            })
+        });
+
+        // WhatsApp solo quando viene spuntato
+        if (nuovoStato) {
+
+            const msg =
+                `Ciao ${nome}! ✅\n\n` +
+                `Abbiamo ricevuto il pagamento per la PitLane57 🔥\n\n` +
+                `💶 Totale ricevuto: €${importo.toFixed(2)}\n\n` +
+                `L'iscrizione è stata confermata! Ti aspettiamo il 6 Marzo! 🚗💨`+
+                `Una settimana prima dell'evento riceverai il tuo biglietto da presentare al nostro box per la registrazione e consegna del braccialetto e Gadget 🔥\n\n`
+
+            window.open(
+                `https://wa.me/${cellulare}?text=${encodeURIComponent(msg)}`,
+                "_blank"
+            );
+        }
+
+        richiesta
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Errore aggiornamento pagamento");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                chk.checked = !nuovoStato;
+                alert("Errore nel salvataggio del pagamento.");
+            });
+
+    });
+
+});
+});
     </script>
     <script>
 
@@ -494,35 +567,8 @@ sortBtn.addEventListener("click", () => {
 });
 
 </script>
-<script>
-let incasso = 0;
 
-document.querySelectorAll("tbody tr").forEach(row => {
 
-    const pagato = row.querySelector(".pagato-checkbox")?.checked;
-
-    const sconti = parseInt(row.querySelector(".sconti-input")?.value || 0);
-
-    if (pagato) {
-        incasso += 42;
-        incasso -= (sconti * 7);
-    }
-});
-</script>
-<script>
-document.querySelectorAll(".sconti-input").forEach(inp => {
-    inp.addEventListener("change", () => {
-
-        const row = inp.closest("tr");
-        const id = row.getAttribute("data-id");
-        const sconti = inp.value;
-
-        fetch(`/update_sconti/${id}?sconti=${sconti}`, {
-            method: "POST"
-        });
-    });
-});
-</script>
     <script>
         let autoRefresh = false;
 let refreshInterval = null;
