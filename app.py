@@ -71,9 +71,9 @@ def index():
 def pitlane57():
     return render_template('pitlane57.html')
 
-@app.route('/aperistatico')
-def aperistatico():
-    return render_template('aperistatico.html')
+@app.route('/pitlane57passeggeri')
+def pitlane57passeggeri():
+    return render_template('pitlane57passeggeri.html')
 
 
 # --- Routes ---
@@ -265,9 +265,9 @@ def biglietto(id_iscrizione):
          titolo = "PIT LANE 57"
          sfondo = "locandina1.jpg"
 
-    elif evento == "aperistatico":
-          titolo = "Aperistatico"
-          sfondo = "locandina2_2.jpg"
+    elif evento == "pitlane57passeggeri":
+          titolo = "PITLANE57 PASSEGGERI"
+          sfondo = "locandina1.jpg"
 
     else:
         titolo = "Night Riders"
@@ -318,9 +318,9 @@ def checkin(id_iscrizione):
          titolo = "PIT LANE 57"
          sfondo = "locandina1.jpg"
 
-    elif evento == "aperistatico":
-          titolo = "Aperistatico"
-          sfondo = "locandina2.jpg"
+    elif evento == "pitlane57passeggeri":
+          titolo = "PITLANE57 PASSEGGERI"
+          sfondo = "locandina1.jpg"
 
     else:
         titolo = "Night Riders"

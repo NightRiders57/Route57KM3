@@ -268,7 +268,7 @@
                 let msg= "";
 
                 if (evento === "pitlane57") {
-                    msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
+                    msg = `Ciao ${nome}, la tua iscrizione come Pilota è stata *ACCETTATA* 🎉%0A%0A` +
                           `Ti aspettiamo il 6 Marzo all’evento *PitLane57 Vol.3*!%0A%0A` +
                           `In Allegato le info per la scelta dei turni!%0A` +
                           `Promo NightRiders 🤙🏻 Acquistando il nostro turno riservato avrai uno sconto di 10€ su un secondo acquisto (OPL o turno)!%0A` +
@@ -282,10 +282,16 @@
 
                           `A presto! 🔥`;
 
-                } else if (evento === "aperistatico") {
-                    msg = `Ciao ${nome}, la tua iscrizione è stata *ACCETTATA* 🎉%0A%0A` +
-                          `Ti aspettiamo il 19 Settembre all'Aperistatico! 🚗💨%0A%0A` +
-                          `Mostra il biglietto che trovi a questo link all'arrivo:%0A${bigliettoUrl}%0A%0A` +
+                } else if (evento === "pitlane57passeggeri") {
+                    msg = `Ciao ${nome}, la tua iscrizione come passeggero è stata *ACCETTATA* 🎉%0A%0A` +
+                          `Ti aspettiamo il 6 Marzo all'evento *PitLane57 Vol.3*! 🚗💨%0A%0A` +
+                          `Per il pagamento della quota di 20€: IBAN:IT57K03268223000EMH01009426%0A` +
+                          `Intestato a : %0A` +
+                          `Fittaiolo Francesco%0A` +
+                          `Causale: %0A` +
+                          `Acquisto passeggero Cremona%0A` +
+
+                          `A pagamento eseguito verrà convalidata la tua iscrizione!%0A` +
 
                           `A presto! 🔥`;
                 }
