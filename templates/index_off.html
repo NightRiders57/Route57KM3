@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Night Riders Events</title>
+
+    <style>
+
+        body{
+            margin:0;
+            background:#000;
+            font-family:Arial, Helvetica, sans-serif;
+            color:white;
+            text-align:center;
+        }
+
+        header{
+            padding:30px 20px 10px;
+        }
+
+        .logo{
+            width:1000px;
+            max-width:80%;
+        }
+
+        h1{
+            color:#f49529;
+            margin-top:20px;
+            font-size:18px;
+            letter-spacing:2px;
+        }
+
+        .sottotitolo{
+            color:#bbb;
+            margin-bottom:40px;
+        }
+
+        .eventi{
+            display:flex;
+            justify-content:center;
+            gap:40px;
+            flex-wrap:wrap;
+            padding-bottom:50px;
+        }
+
+        .evento{
+            transition:.25s;
+        }
+
+        .evento:hover{
+            transform:scale(1.04);
+        }
+
+        .evento img{
+            width:330px;
+            max-width:90vw;
+            border-radius:15px;
+            border:3px solid #f49529;
+            box-shadow:0 0 25px rgba(244,149,41,.35);
+        }
+
+        a{
+            text-decoration:none;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<header>
+
+    <img src="/static/logo.png" class="logo">
+
+    <h1>EVENTS</h1>
+
+    <div class="sottotitolo">
+        Seleziona l'evento a cui desideri iscriverti
+    </div>
+
+</header>
+
+<div class="eventi">
+
+    <a class="evento" href="/pitlane57">
+        <img src="/static/locandina.jpg" alt="Locandina">
+        <h1>ISCRIZIONE PILOTI</h1>
+    </a>
+
+    <a class="evento" href="/pitlane57passeggeri">
+        <img src="/static/locandina.jpg" alt="Locandina">
+        <h1>ISCRIZIONE PASSEGGERI</h1>
+    </a>
+
+    <!--<a class="evento" style="pointer-events: none; opacity: 0.5; cursor: default;">
+        <img src="/static/locandina2.jpg" alt="SMP">
+    </a>-->
+
+</div>
+
+</body>
+</html>
